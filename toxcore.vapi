@@ -26,12 +26,20 @@ namespace Tox {
 
 	[CCode (cprefix = "TOX_")]
 	public const int VERSION_MAJOR;
+	[CCode (cprefix = "tox_")]
+	public int32 version_major(void);
 	[CCode (cprefix = "TOX_")]
 	public const int VERSION_MINOR;
+	[CCode (cprefix = "tox_")]
+	public int32 version_minor(void);
 	[CCode (cprefix = "TOX_")]
 	public const int VERSION_PATCH;
+	[CCode (cprefix = "tox_")]
+	public int32 version_patch(void);
 	[CCode (cprefix = "TOX_")]
 	public void VERSION_IS_API_COMPATIBLE(MAJOR, MINOR, PATCH);
+	[CCode (cprefix = "tox_")]
+	bool version_is_compatible(int32 major, int32 minor, int32 patch);
 	[CCode (cprefix = "TOX_")]
 	public void TOX_VERSION_REQUIRE(MAJOR, MINOR, PATCH);
 	[CCode (cprefix = "TOX_")]
@@ -290,7 +298,7 @@ namespace Tox {
 		CHANGE_PEER_NAME
 	}
 
-	[CCode (cname = "Tox_Options",  destroy_function = "", has_type_id = false)]
+	[CCode (cname = "Tox_Options",  destroy_function = "tox_options_free", has_type_id = false)]
 	public class Options {
 		[CCode (cname = "tox_options_new")]
 		public Options(ToxOptionsErr? error)
@@ -325,27 +333,8 @@ namespace Tox {
 	[CCode (cname = "Tox", free_function = "tox_kill", cprefix = "tox_", has_type_id = false)]
 	[Compact]
 	public class Tox {
-		/* NOTE: Strings in Tox are all UTF-8, (This means that there is no terminating NULL character.)
-		 *
-		 * The exact buffer you send will be received at the other end without modification.
-		 *
-		 * Do not treat Tox strings as C strings.
-		 */
-
-		/*
-		 *  Run this function at startup.
-		 *
-		 * Initializes a tox structure
-		 *  The type of communication socket depends on ipv6enabled:
-		 *  If set to 0 (zero), creates an IPv4 socket which subsequently only allows
-		 *IPv4 communication
-		 *  If set to anything else, creates an IPv6 socket which allows both IPv4 AND
-		 *IPv6 communication
-		 *
-		 *  return allocated instance of tox on success.
-		 *  return 0 if there are problems.
-		 */
 		[CCode (cname = "tox_new")]
 		public Tox(Options? options = null);
+		
 	}
 }
