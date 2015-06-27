@@ -1,5 +1,5 @@
 /*
- *    tox-1.0.vapi
+ *tox-1.0.vapi
  *
  *    Copyright (C) 2013-2014  Venom authors and contributors
  *
@@ -291,7 +291,9 @@ namespace Tox {
 	}
 
 	[CCode (cname = "Tox_Options",  destroy_function = "", has_type_id = false)]
-	public struct Options {
+	public class Options {
+		[CCode (cname = "tox_options_new")]
+		public Options(ToxOptionsErr? error)
 		/*
 		*	The type of UDP socket created depends on ipv6enabled:
 		*	If set to 0 (zero), creates an IPv4 socket which subsequently only allows
@@ -323,5 +325,27 @@ namespace Tox {
 	[CCode (cname = "Tox", free_function = "tox_kill", cprefix = "tox_", has_type_id = false)]
 	[Compact]
 	public class Tox {
+		/* NOTE: Strings in Tox are all UTF-8, (This means that there is no terminating NULL character.)
+		 *
+		 * The exact buffer you send will be received at the other end without modification.
+		 *
+		 * Do not treat Tox strings as C strings.
+		 */
+
+		/*
+		 *  Run this function at startup.
+		 *
+		 * Initializes a tox structure
+		 *  The type of communication socket depends on ipv6enabled:
+		 *  If set to 0 (zero), creates an IPv4 socket which subsequently only allows
+		 *IPv4 communication
+		 *  If set to anything else, creates an IPv6 socket which allows both IPv4 AND
+		 *IPv6 communication
+		 *
+		 *  return allocated instance of tox on success.
+		 *  return 0 if there are problems.
+		 */
+		[CCode (cname = "tox_new")]
+		public Tox(Options? options = null);
 	}
 }
