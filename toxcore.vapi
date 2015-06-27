@@ -30,19 +30,18 @@ namespace Tox {
 	public const int VERSION_MINOR;
 	[CCode (cprefix = "TOX_")]
 	public const int VERSION_PATCH;
-/*
 	[CCode (cprefix = "TOX_")]
-	public const int VERSION_IS_API_COMPATIBLE;
+	public void VERSION_IS_API_COMPATIBLE(MAJOR, MINOR, PATCH);
 	[CCode (cprefix = "TOX_")]
-	public const int TOX_VERSION_REQUIRE;
+	public void TOX_VERSION_REQUIRE(MAJOR, MINOR, PATCH);
 	[CCode (cprefix = "TOX_")]
-	public const int TOX_VERSION_IS_ABI_COMPATIBLE;*/
+	public void VERSION_IS_ABI_COMPATIBLE(MAJOR, MINOR, PATCH);
 	[CCode (cprefix = "TOX_")]
 	public const int PUBLIC_KEY_SIZE;
 	[CCode (cprefix = "TOX_")]
 	public const int SECRET_KEY_SIZE;
-/*	[CCode (cprefix = "TOX_")]
-	public const int ADDRESS_SIZE;*/
+	[CCode (cprefix = "TOX_")]
+	public void ADDRESS_SIZE(PUBLIC_KEY_SIZE + sizeof(uint32) + sizeof(uint16));
 	[CCode (cprefix = "TOX_")]
 	public const int MAX_NAME_LENGTH;
 	[CCode (cprefix = "TOX_")]
@@ -289,6 +288,36 @@ namespace Tox {
 		PEER_ADD,
 		PEER_DEL,
 		CHANGE_PEER_NAME
+	}
+
+	[CCode (cname = "Tox_Options",  destroy_function = "", has_type_id = false)]
+	public struct Options {
+		/*
+		*	The type of UDP socket created depends on ipv6enabled:
+		*	If set to 0 (zero), creates an IPv4 socket which subsequently only allows
+		*		IPv4 communication
+		*	If set to anything else (default), creates an IPv6 socket which allows both IPv4 AND
+		*		IPv6 communication
+		*/
+		uint8 ipv6enabled;
+		 /*
+		 * Set to 1 to disable udp support. (default: 0)
+		 * This will force Tox to use TCP only which may slow things down.
+		 * Disabling udp support is necessary when using anonymous proxies or Tor.
+		 */
+		uint8 udp_disabled;
+		/* Enable proxy support. (only basic TCP socks5 proxy currently supported.) (default: TOX_PROXY_NONE (disabled))*/
+		ProxyType proxy_type;
+		/* Proxy ip or domain in NULL terminated string format. */
+		char proxy_host[256];
+		/* Proxy port: in host byte order. */
+		uint16 proxy_port;
+		uint16 start_port;
+		uint16 end_port;
+		uint16 tcp_port;
+		SaveDataType savedata_type;
+		const uint8 savedata_data;
+		size_t savedata_length;
 	}
 
 	[CCode (cname = "Tox", free_function = "tox_kill", cprefix = "tox_", has_type_id = false)]
