@@ -157,35 +157,139 @@ namespace Tox {
 	}
 
 	[CCode (cname = "TOX_ERR_FRIEND_BY_PUBLIC_KEY", cprefix = "TOX_ERR_FRIEND_BY_PUBLIC_KEY_", has_type_id = false)]
+	enum FriendByPubkeyErr {
+		OK,
+		FRIEND_NOT_FOUND
+	}
 
 	[CCode (cname = "TOX_ERR_FRIEND_GET_LAST_ONLINE", cprefix = "TOX_ERR_FRIEND_GET_LAST_ONLINE_", has_type_id = false)]
+	enum FriendGetPubkeyErr {
+		OK,
+		FRIEND_NOT_FOUND
+	}
 
 	[CCode (cname = "TOX_ERR_FRIEND_QUERY", cprefix = "TOX_ERR_FRIEND_QUERY_", has_type_id = false)]
+	enum FriendQueryErr {
+		OK,
+		NULL,
+		FRIEND_NOT_FOUND
+	}
 
 	[CCode (cname = "TOX_ERR_SET_TYPING", cprefix = "TOX_ERR_SET_TYPING_", has_type_id = false)]
+	enum SetTypingErr {
+		OK,
+		NULL,
+		FRIEND_NOT_FOUND
+	}
 
 	[CCode (cname = "TOX_ERR_FRIEND_SEND_MESSAGE", cprefix = "TOX_ERR_FRIEND_SEND_MESSAGE_", has_type_id = false)]
+	enum SendMessageErr {
+		OK,
+		NULL,
+		FRIEND_NOT_FOUND,
+		FRIEND_NOT_CONNECTED,
+		SENDQ,
+		TOO_LONG,
+		EMPTY
+	}
 
 	[CCode (cname = "TOX_FILE_KIND", cprefix = "TOX_FILE_KIND_", has_type_id = false)]
+	enum FileKind {
+		DATA,
+		AVATAR
+	}
 
 	[CCode (cname = "TOX_FILE_CONTROL", cprefix = "TOX_FILE_CONTROL_", has_type_id = false)]
+	enum FileControl {
+		RESUME,
+		PAUSE,
+		CANCEL
+	}
 
 	[CCode (cname = "TOX_ERR_FILE_CONTROL", cprefix = "TOX_ERR_FILE_CONTROL_", has_type_id = false)]
+	enum FileControlErr {
+		OK,
+		FRIEND_NOT_FOUND,
+		FRIEND_NOT_CONNECTED,
+		NOT_FOUND,
+		NOT_PAUSED,
+		DENIED,
+		ALREADY_PAUSED,
+		SENDQ
+	}
 
 	[CCode (cname = "TOX_ERR_FILE_SEEK", cprefix = "TOX_ERR_FILE_SEEK_", has_type_id = false)]
+	enum FileSeekErr {
+		OK,
+		FRIEND_NOT_FOUND,
+		FRIEND_NOT_CONNECTED,
+		NOT_FOUND,
+		DENIED,
+		INVALID_POSITION,
+		SENDQ
+	}
 
 	[CCode (cname = "TOX_ERR_FILE_GET", cprefix = "TOX_ERR_FILE_GET_", has_type_id = false)]
+	enum FileGetErr {
+		OK,
+		NULL,
+		FRIEND_NOT_FOUND,
+		NOT_FOUND
+	}
 
 	[CCode (cname = "TOX_ERR_FILE_SEND", cprefix = "TOX_ERR_FILE_SEND_", has_type_id = false)]
+	enum FileSendErr {
+		OK,
+		NULL,
+		FRIEND_NOT_FOUND,
+		FRIEND_NOT_CONNECTED,
+		NAME_TOO_LONG,
+		TOO_MANY
+	}
 
 	[CCode (cname = "TOX_ERR_FILE_SEND_CHUNK", cprefix = "TOX_ERR_FILE_SEND_CHUNK_", has_type_id = false)]
+	enum SendChunkErr {
+		OK,
+		NULL,
+		FRIEND_NOT_FOUND,
+		FRIEND_NOT_CONNECTED,
+		NOT_FOUND,
+		NOT_TRANSFERRING,
+		INVALID_LENGTH,
+		SENDQ,
+		WRONG_POSITION
+	}
 
 	[CCode (cname = "TOX_ERR_FRIEND_CUSTOM_PACKET", cprefix = "TOX_ERR_FRIEND_CUSTOM_PACKET_", has_type_id = false)]
+	enum CustomPacketErr {
+		OK,
+		NULL,
+		FRIEND_NOT_FOUND,
+		FRIEND_NOT_CONNECTED,
+		INVALID,
+		EMPTY,
+		TOO_LONG,
+		SENDQ
+	}
 
-	[CCode (cname = "TOX_ERR_GET_PORT", cprefix = "TOX_ERR_GET_PORT_", has_type_id = false)]
+	[CCode (cname = "gint32", cprefix = "TOX_ERR_GET_PORT_", has_type_id = false)]
+	enum GetPortErr {
+		OK,
+		NOT_BOUND
+	}
 
 	[CCode (cname = "TOX_GROUPCHAT_TYPE", cprefix = "TOX_GROUPCHAT_TYPE_", has_type_id = false)]
+	enum GroupchatType {
+		TEXT,
+		AV
+	}
+
 	[CCode (cname = "TOX_CHAT_CHANGE", cprefix = "TOX_CHAT_CHANGE_", has_type_id = false)]
+	enum ChatChange {
+		PEER_ADD,
+		PEER_DEL,
+		CHANGE_PEER_NAME
+	}
 
 	[CCode (cname = "Tox", free_function = "tox_kill", cprefix = "tox_", has_type_id = false)]
 	[Compact]
