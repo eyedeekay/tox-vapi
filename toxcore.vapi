@@ -23,7 +23,6 @@
 namespace Tox {
 	[CCode (cprefix = "TOX_")]
 	public const int DEFINED;
-
 	[CCode (cprefix = "TOX_")]
 	public const int VERSION_MAJOR;
 	[CCode (cprefix = "tox_")]
@@ -66,14 +65,6 @@ namespace Tox {
 	public const int FILE_ID_LENGTH;
 	[CCode (cprefix = "TOX_")]
 	public const int MAX_FILENAME_LENGTH;
-
-	[CCode (cname = "TOX_USER_STATUS", cprefix = "TOX_USER_STATUS_", has_type_id = false)]
-	public enum UserStatus {
-		NONE,
-		AWAY,
-		BUSY,
-		INVALID
-	}
 
 	[CCode (cname = "TOX_USER_STATUS", cprefix = "TOX_USER_STATUS_", has_type_id = false)]
 	public enum UserStatus {
@@ -131,11 +122,16 @@ namespace Tox {
 	}
 
 	[CCode (cname = "TOX_CONNECTION", cprefix = "TOX_CONNECTION_", has_type_id = false)]
-	enum ConnectionErr{
+	enum Connection{
 		NONE,
 		TCP,
 		UDP
 	}
+
+/*	[CCode (cname = "void")]
+	public class SelfConnectionStatus{
+		[CCode (cname = "tox_self_connection_status_cb")]
+	}*/
 
 	[CCode (cname = "TOX_ERR_SET_INFO", cprefix = "TOX_ERR_SET_INFO_", has_type_id = false)]
 	enum SetInfoErr{
@@ -182,6 +178,32 @@ namespace Tox {
 		FRIEND_NOT_FOUND
 	}
 
+/*
+	[CCode (cname = "void")]
+	public class FriendNameCb{
+		[CCode cname="tox_friend_name_cb"]
+	}
+
+	[CCode (cname = "void")]
+	public class FriendStatusMessageCb{
+		[CCode cname="tox_friend_status_message_cb"]
+	}
+
+	[CCode (cname = "void")]
+	public class FriendStatusCb{
+		[CCode cname="tox_friend_status_cb"]
+	}
+
+	[CCode (cname = "void")]
+	public class FriendConnectionStatusCb{
+		[CCode cname="tox_friend_connection_status_cb"]
+	}
+
+	[CCode (cname = "void")]
+	public class FriendTypingCb{
+		[CCode cname="tox_friend_typing_cb"]
+	}
+*/
 	[CCode (cname = "TOX_ERR_SET_TYPING", cprefix = "TOX_ERR_SET_TYPING_", has_type_id = false)]
 	enum SetTypingErr {
 		OK,
@@ -200,6 +222,19 @@ namespace Tox {
 		EMPTY
 	}
 
+/*	[CCode (cname = "void")]
+	public class FriendReadReceiptCb{
+		[CCode cname="tox_friend_read_reciept_cb"]
+	}
+	[CCode (cname = "void")]
+	public class FriendRequestCb{
+		[CCode cname="tox_friend_request_cb"]
+	}
+	[CCode (cname = "void")]
+	public class FriendMessageCb{
+		[CCode cname="tox_friend_message_cb"]
+	}
+*/
 	[CCode (cname = "TOX_FILE_KIND", cprefix = "TOX_FILE_KIND_", has_type_id = false)]
 	enum FileKind {
 		DATA,
@@ -225,6 +260,11 @@ namespace Tox {
 		SENDQ
 	}
 
+/*	[CCode (cname = "void")]
+	public class FileRecieveControlCb{
+		[CCode cname="tox_file_recv_control_cb"]
+	}
+*/
 	[CCode (cname = "TOX_ERR_FILE_SEEK", cprefix = "TOX_ERR_FILE_SEEK_", has_type_id = false)]
 	enum FileSeekErr {
 		OK,
@@ -267,6 +307,22 @@ namespace Tox {
 		WRONG_POSITION
 	}
 
+/*	[CCode (cname = "void")]
+	public class FileChunkRequestCb{
+		[CCode cname="tox_file_chunch_request_cb"]
+	}
+
+	[CCode (cname = "void")]
+	public class FileRecieveCb{
+		[CCode cname="tox_file_recieve_cb"]
+	}
+
+	[CCode (cname = "void")]
+	public class FileRecieveChunkCb{
+		[CCode cname="tox_file_recieve_chunk_cb"]
+	}
+*/
+
 	[CCode (cname = "TOX_ERR_FRIEND_CUSTOM_PACKET", cprefix = "TOX_ERR_FRIEND_CUSTOM_PACKET_", has_type_id = false)]
 	enum CustomPacketErr {
 		OK,
@@ -278,6 +334,18 @@ namespace Tox {
 		TOO_LONG,
 		SENDQ
 	}
+
+/*	[CCode (cname = "void")]
+	public class FriendLossyPacketCb{
+		[CCode cname="tox_friend_lossy_packet_cb"]
+	}
+*/
+
+/*	[CCode (cname = "void")]
+	public class FriendLosslessPacketCb{
+		[CCode cname="tox_friend_lossless_packet_cb"]
+	}
+*/
 
 	[CCode (cname = "gint32", cprefix = "TOX_ERR_GET_PORT_", has_type_id = false)]
 	enum GetPortErr {
@@ -335,6 +403,6 @@ namespace Tox {
 	public class Tox {
 		[CCode (cname = "tox_new")]
 		public Tox(Options? options = null);
-		
+
 	}
 }
