@@ -339,9 +339,7 @@ namespace Tox {
 	public class FriendLossyPacketCb{
 		[CCode cname="tox_friend_lossy_packet_cb"]
 	}
-*/
-
-/*	[CCode (cname = "void")]
+	[CCode (cname = "void")]
 	public class FriendLosslessPacketCb{
 		[CCode cname="tox_friend_lossless_packet_cb"]
 	}
