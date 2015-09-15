@@ -22,11 +22,17 @@
 [CCode (cheader_filename = "tox/tox.h", cprefix = "tox_")]
 namespace Tox {
   [CCode (cprefix = "TOX_")]
+  public const int PUBLIC_KEY_SIZE;
+  [CCode (cprefix = "TOX_")]
+  public const int SECRET_KEY_SIZE;
+  [CCode (cprefix = "TOX_")]
+  public const int ADDRESS_SIZE;
+  [CCode (cprefix = "TOX_")]
   public const int MAX_NAME_LENGTH;
   [CCode (cprefix = "TOX_")]
   public const int MAX_MESSAGE_LENGTH;
   [CCode (cprefix = "TOX_")]
-  public const int MAX_STATUSMESSAGE_LENGTH;
+  public const int MAX_STATUS_MESSAGE_LENGTH;
   [CCode (cprefix = "TOX_")]
   public const int CLIENT_ID_SIZE;
   [CCode (cprefix = "TOX_")]
@@ -197,7 +203,7 @@ namespace Tox {
 
     /* Checks friend's connecting status.
      *
-     *  return 1 if friend is connected to us (Online).
+     *  return 1 if friend is connected to us (Online).	
      *  return 0 if friend is not connected to us (Offline).
      *  return -1 on failure.
      */
