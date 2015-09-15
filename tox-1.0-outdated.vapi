@@ -30,21 +30,19 @@ namespace Tox {
   [CCode (cprefix = "TOX_")]
   public const int MAX_NAME_LENGTH;
   [CCode (cprefix = "TOX_")]
-  public const int MAX_MESSAGE_LENGTH;
-  [CCode (cprefix = "TOX_")]
   public const int MAX_STATUS_MESSAGE_LENGTH;
   [CCode (cprefix = "TOX_")]
-  public const int CLIENT_ID_SIZE;
+  public const int MAX_FRIEND_REQUEST_LENGTH;
   [CCode (cprefix = "TOX_")]
-  public const int AVATAR_MAX_DATA_LENGTH;
+  public const int MAX_MESSAGE_LENGTH;
+  [CCode (cprefix = "TOX_")]
+  public const int MAX_CUSTOM_PACKET_SIZE;
   [CCode (cprefix = "TOX_")]
   public const int HASH_LENGTH;
   [CCode (cprefix = "TOX_")]
-  public const int FRIEND_ADDRESS_SIZE;
+  public const int FILE_ID_LENGTH;
   [CCode (cprefix = "TOX_")]
-  public const int ENABLE_IPV6_DEFAULT;
-  [CCode (cprefix = "TOX_", array_length_cexpr="TOX_ENC_SAVE_MAGIC_LENGTH")]
-  public const uint8[] ENC_SAVE_MAGIC_NUMBER;
+  public const int MAX_FILENAME_LENGTH;
 
   /* Errors for m_addfriend
    * FAERR - Friend Add Error
