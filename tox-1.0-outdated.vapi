@@ -505,7 +505,7 @@ namespace Tox {
      * return -1 on failure
      */
     public int group_message_send(int groupnumber, [CCode(array_length_type="guint16")] uint8[] message);
-    
+
     /* send a group action
      * return 0 on success
      * return -1 on failure
@@ -831,5 +831,3 @@ namespace Tox {
     public int load([CCode(array_length_type = "guint32")] uint8[] data);
   }
 }
-
-

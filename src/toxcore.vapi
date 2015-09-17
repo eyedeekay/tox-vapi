@@ -1,5 +1,5 @@
 /*
- *    tox-1.0.vapi
+ *tox-1.0.vapi
  *
  *    Copyright (C) 2013-2014  Venom authors and contributors
  *
@@ -20,35 +20,35 @@
  */
 
 [CCode (cheader_filename = "tox/tox.h", cprefix = "tox_")]
-namespace Tox {
+namespace ValaToxBinding {
 	[CCode (cprefix = "TOX_")]
 	public const int DEFINED;
 	[CCode (cprefix = "TOX_")]
 	public const int VERSION_MAJOR;
-	//[CCode (cprefix = "tox_")]
-	//public int32 version_major(void);
+	[CCode (cprefix = "tox_")]
+	public int32 version_major();
 	[CCode (cprefix = "TOX_")]
 	public const int VERSION_MINOR;
-	//[CCode (cprefix = "tox_")]
-	//public int32 version_minor(void);
+	[CCode (cprefix = "tox_")]
+	public int32 version_minor();
 	[CCode (cprefix = "TOX_")]
 	public const int VERSION_PATCH;
-	//[CCode (cprefix = "tox_")]
-	//public int32 version_patch(void);
-	//[CCode (cprefix = "TOX_")]
-	//public void VERSION_IS_API_COMPATIBLE(MAJOR, MINOR, PATCH);
+	[CCode (cprefix = "tox_")]
+	public int32 version_patch();
+	[CCode (cprefix = "TOX_")]
+	public void VERSION_IS_API_COMPATIBLE(int32 major, int32 minor, int32 patch);
 	[CCode (cprefix = "tox_")]
 	bool version_is_compatible(int32 major, int32 minor, int32 patch);
-	//[CCode (cprefix = "TOX_")]
-	//public void TOX_VERSION_REQUIRE(MAJOR, MINOR, PATCH);
-	//[CCode (cprefix = "TOX_")]
-	//public void VERSION_IS_ABI_COMPATIBLE(MAJOR, MINOR, PATCH);
+	[CCode (cprefix = "TOX_")]
+	public void TOX_VERSION_REQUIRE(int32 major, int32 minor, int32 patch);
+	[CCode (cprefix = "TOX_")]
+	public void VERSION_IS_ABI_COMPATIBLE(int32 major, int32 minor, int32 patch);
 	[CCode (cprefix = "TOX_")]
 	public const int PUBLIC_KEY_SIZE;
 	[CCode (cprefix = "TOX_")]
 	public const int SECRET_KEY_SIZE;
-	//[CCode (cprefix = "TOX_")]
-	//public void ADDRESS_SIZE(PUBLIC_KEY_SIZE + sizeof(uint32) + sizeof(uint16));
+	[CCode (cprefix = "TOX_")]
+	public void ADDRESS_SIZE(int32 public_key_size);
 	[CCode (cprefix = "TOX_")]
 	public const int MAX_NAME_LENGTH;
 	[CCode (cprefix = "TOX_")]
@@ -366,8 +366,6 @@ namespace Tox {
 
 	[CCode (cname = "Tox_Options",  destroy_function = "tox_options_free", has_type_id = false)]
 	public struct Options {
-		[CCode (cname = "tox_options_new")]
-		//public Options(ToxOptionsErr? error)
 		/*
 		*	The type of UDP socket created depends on ipv6enabled:
 		*	If set to 0 (zero), creates an IPv4 socket which subsequently only allows
@@ -399,22 +397,34 @@ namespace Tox {
 	[CCode (cname = "Tox", free_function = "tox_kill", cprefix = "tox_", has_type_id = false)]
 	[Compact]
 	public class Tox {
+
 		[CCode (cname = "tox_new")]
-		public Tox (Options? options = null);
+		public Tox (Options? options = null, NewErr? error);
 
-		size_t get_savedata_size (Tox tox);
-		void get_savedata (Tox tox, [CCode(array_length=false)] uint8[] savedata);
+		/*
+     * Use this function to bootstrap the client.
+     */
 
-		public bool bootstrap (string address, int port, [CCode (array_length=false)] uint8[] public_key, BootstrapErr? error);
-		public bool add_tcp_relay (Tox tox, char address, [CCode (array_length=false)] uint16[] port, [CCode (array_length=false)] uint8[] public_key, BootstrapErr error);
+    /* Resolves address into an IP address. If successful, sends a "get nodes"
+     *   request to the given node with ip, port (in network byte order, HINT: use htons())
+     *   and public_key to setup connections
+     *
+     * address can be a hostname or an IP address (IPv4 or IPv6).
+     * if ipv6enabled is 0 (zero), the resolving sticks STRICTLY to IPv4 addresses
+     * if ipv6enabled is not 0 (zero), the resolving looks for IPv6 addresses first,
+     *   then IPv4 addresses.
+     *
+     *  returns 1 if the address could be converted into an IP address
+     *  returns 0 otherwise
+     */
+    public int bootstrap (
+			string address,
+			uint16 port,
+			[CCode(array_length=false)] uint8[] public_key,
+			BootstrapErr? error
+		);
 
-		Connection self_get_connection_status (Tox tox);
-		void self_get_connection_status_cb (Tox tox, Connection connection_status, [CCode(array_length_type="guint16")] uint8[] user_data);
-		//void callback_self_connection_status(Tox tox, self_connection_status_cb callback, [CCode(array_length_type="guint16")] uint8[] user_data);
+		public void iterate ();
 
-		[CCode (cname = "tox_iterate")]
-		public void wait ();
-
-		public void self_get_public_key(Tox tox, [CCode (array_length=false)] uint8[] public_key);
 	}
 }

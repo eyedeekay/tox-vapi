@@ -1,26 +1,50 @@
-using Tox;
+using ValaToxBinding;
 
 namespace vapitest {
   public class App : GLib.Object {
-    private Tox.Tox handle;
-    private Tox.Options options;
+    private Tox handle;
+    //private Tox.Options options;
 
     public App () {
+      // TODO: Initialize the whole app.
+
+      // Called first.
+      this.init_opts ();
+    }
+
+    private void run () {
       this.init_tox ();
+    }
+
+    private void init_opts () {
+      //this.options = Tox.Options ();
+      /*{
+        ipv6enabled = 0,
+        udp_disabled = 0,
+        proxy_type = ProxyType.NONE
+      };*/
     }
 
     private void init_tox () {
       var bootstrap_host = "195.154.119.113";
-      var bootstrap_port = 33445;
-      var bootstrap_pkey = hexstring_to_bin("E398A69646B8CEACA9F0B84F553726C1C49270558C57DF5F3C368F05A7D71354");
+      uint16 bootstrap_port = 33445;
+      var bootstrap_pkey = hexstring_to_bin(
+        "E398A69646B8CEACA9F0B84F553726C1C49270558C57DF5F3C368F05A7D71354"
+      );
 
-      this.handle = new Tox.Tox (null);
-      this.handle.bootstrap (bootstrap_host, bootstrap_port, bootstrap_pkey, null);
-      this.handle.wait ();
+      this.handle = new Tox (null, null);
+      this.handle.bootstrap (
+        bootstrap_host,
+        bootstrap_port,
+        bootstrap_pkey,
+        null
+      );
+      this.handle.iterate ();
     }
 
     public static int main (string[] args) {
       var app = new App ();
+      app.run ();
       return 0;
     }
 
