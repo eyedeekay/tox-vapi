@@ -4,31 +4,52 @@ namespace vapitest {
   public class App : GLib.Object {
     private Tox handle;
 
+    private uint8[] USER_NAME;
+    private uint8[] USER_MOOD;
+
+    private const string BOOTSTRAP_HOST = "195.154.119.113";
+    private const uint16 BOOTSTRAP_PORT = 33445;
+    private uint8[] BOOTSTRAP_PUBKEY; // Initialized in construct.
+
     // Constructor.
     public App () {
       // TODO: Initialize the whole app here.
+      this.USER_NAME = this.hexstring_to_bin ("ValaTox User");
+      this.USER_MOOD = this.hexstring_to_bin ("Happy to uses ValaTox client!");
+
+      this.BOOTSTRAP_PUBKEY = this.hexstring_to_bin (
+        "E398A69646B8CEACA9F0B84F553726C1C49270558C57DF5F3C368F05A7D71354"
+      );
+
+      // Init the Tox handle:
+      this.handle = new Tox (null, null);
     }
 
     // Run the test app.
     private void run () {
-      this.init_tox ();
+      this.init_tox_stuff ();
     }
 
-    // Init our Tox handle.
-    private void init_tox () {
-      var bootstrap_host = "195.154.119.113";
-      uint16 bootstrap_port = 33445;
-      var bootstrap_pkey = hexstring_to_bin(
-        "E398A69646B8CEACA9F0B84F553726C1C49270558C57DF5F3C368F05A7D71354"
-      );
+    // Init our Tox related stuff.
+    private void init_tox_stuff () {
+      // Set the username.
+      this.handle.set_name (USER_NAME);
 
-      this.handle = new Tox (null, null);
+      // Set the user status.
+      this.handle.set_user_status (UserStatus.AWAY);
+
+      // Set the user mood. (status message)
+      this.handle.set_status_message (USER_MOOD);
+
+      // Bootstrap to the needed node.
       this.handle.bootstrap (
-        bootstrap_host,
-        bootstrap_port,
-        bootstrap_pkey,
+        BOOTSTRAP_HOST,
+        BOOTSTRAP_PORT,
+        BOOTSTRAP_PUBKEY,
         null
       );
+
+      // Iterate the Tox handle.
       this.handle.iterate ();
     }
 
@@ -40,7 +61,7 @@ namespace vapitest {
     }
 
     // Convert a hexstring to uint8[].
-    public static uint8[] hexstring_to_bin (string s) {
+    public uint8[] hexstring_to_bin (string s) {
       uint8[] buf = new uint8[s.length / 2];
       for (int i = 0; i < buf.length; ++i) {
         int b = 0;
@@ -51,7 +72,7 @@ namespace vapitest {
     }
 
     // Convert a uint8[] to string.
-    public static string bin_to_hexstring (uint8[] bin)
+    public string bin_to_hexstring (uint8[] bin)
       requires (bin.length != 0)
     {
       StringBuilder b = new StringBuilder ();
@@ -62,7 +83,7 @@ namespace vapitest {
     }
 
     // Convert a uint8[] to C string null terminated.
-    public static string uint8_to_nullterm_string (uint8[] data) {
+    public string uint8_to_nullterm_string (uint8[] data) {
       //TODO optimize this
       uint8[] buf = new uint8[data.length + 1];
       Memory.copy (buf, data, data.length);

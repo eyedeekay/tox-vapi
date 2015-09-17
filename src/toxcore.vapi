@@ -427,6 +427,26 @@ namespace ValaToxBinding {
 			BootstrapErr? error
 		);
 
+		/* Set our nickname.
+     * name must be a string of maximum MAX_NAME_LENGTH length.
+     * length must be at least 1 byte.
+     * length is the length of name with the NULL terminator.
+     *
+     *  return 0 if success.
+     *  return -1 if failure.
+     */
+		public int set_name([CCode(array_length_type="guint16")] uint8[] name);
+
+		/* Set our user status.
+     *
+     * userstatus must be one of TOX_USERSTATUS values.
+     *
+     *  returns 0 on success.
+     *  returns -1 on failure.
+     */
+    public int set_status_message([CCode(array_length_type="guint16")] uint8[] status);
+    public int set_user_status(UserStatus status);
+
 		public void iterate ();
 	}
 }
