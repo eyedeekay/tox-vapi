@@ -3,28 +3,18 @@ using ValaToxBinding;
 namespace vapitest {
   public class App : GLib.Object {
     private Tox handle;
-    //private Tox.Options options;
 
+    // Constructor.
     public App () {
-      // TODO: Initialize the whole app.
-
-      // Called first.
-      this.init_opts ();
+      // TODO: Initialize the whole app here.
     }
 
+    // Run the test app.
     private void run () {
       this.init_tox ();
     }
 
-    private void init_opts () {
-      //this.options = Tox.Options ();
-      /*{
-        ipv6enabled = 0,
-        udp_disabled = 0,
-        proxy_type = ProxyType.NONE
-      };*/
-    }
-
+    // Init our Tox handle.
     private void init_tox () {
       var bootstrap_host = "195.154.119.113";
       uint16 bootstrap_port = 33445;
@@ -42,13 +32,14 @@ namespace vapitest {
       this.handle.iterate ();
     }
 
+    // Static main.
     public static int main (string[] args) {
       var app = new App ();
       app.run ();
       return 0;
     }
 
-    // convert a hexstring to uint8[]
+    // Convert a hexstring to uint8[].
     public static uint8[] hexstring_to_bin (string s) {
       uint8[] buf = new uint8[s.length / 2];
       for (int i = 0; i < buf.length; ++i) {
@@ -59,7 +50,7 @@ namespace vapitest {
       return buf;
     }
 
-    // convert a uint8[] to string
+    // Convert a uint8[] to string.
     public static string bin_to_hexstring (uint8[] bin)
       requires (bin.length != 0)
     {
@@ -70,6 +61,7 @@ namespace vapitest {
       return b.str;
     }
 
+    // Convert a uint8[] to C string null terminated.
     public static string uint8_to_nullterm_string (uint8[] data) {
       //TODO optimize this
       uint8[] buf = new uint8[data.length + 1];
