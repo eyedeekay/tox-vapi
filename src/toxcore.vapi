@@ -18,7 +18,10 @@
  *    You should have received a copy of the GNU General Public License
  *    along with Venom.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+/**
+*	This is the main toxcore.vapi
+*	this file should contains the toxcore binding.
+*/
 [CCode (cheader_filename = "tox/tox.h", cprefix = "tox_")]
 namespace ValaToxBinding {
 	[CCode (cprefix = "TOX_")]
