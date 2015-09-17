@@ -425,6 +425,5 @@ namespace ValaToxBinding {
 		);
 
 		public void iterate ();
-
 	}
 }
