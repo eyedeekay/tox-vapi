@@ -22,94 +22,48 @@
 [CCode (cheader_filename = "tox/tox.h", cprefix = "tox_")]
 namespace Tox {
   [CCode (cprefix = "TOX_")]
-  public const int PUBLIC_KEY_SIZE;
-  [CCode (cprefix = "TOX_")]
-  public const int SECRET_KEY_SIZE;
-  [CCode (cprefix = "TOX_")]
-  public const int ADDRESS_SIZE;
-  [CCode (cprefix = "TOX_")]
   public const int MAX_NAME_LENGTH;
-  [CCode (cprefix = "TOX_")]
-  public const int MAX_STATUS_MESSAGE_LENGTH;
-  [CCode (cprefix = "TOX_")]
-  public const int MAX_FRIEND_REQUEST_LENGTH;
   [CCode (cprefix = "TOX_")]
   public const int MAX_MESSAGE_LENGTH;
   [CCode (cprefix = "TOX_")]
-  public const int MAX_CUSTOM_PACKET_SIZE;
+  public const int MAX_STATUSMESSAGE_LENGTH;
+  [CCode (cprefix = "TOX_")]
+  public const int CLIENT_ID_SIZE;
+  [CCode (cprefix = "TOX_")]
+  public const int AVATAR_MAX_DATA_LENGTH;
   [CCode (cprefix = "TOX_")]
   public const int HASH_LENGTH;
   [CCode (cprefix = "TOX_")]
-  public const int FILE_ID_LENGTH;
+  public const int FRIEND_ADDRESS_SIZE;
   [CCode (cprefix = "TOX_")]
-  public const int MAX_FILENAME_LENGTH;
+  public const int ENABLE_IPV6_DEFAULT;
+  [CCode (cprefix = "TOX_", array_length_cexpr="TOX_ENC_SAVE_MAGIC_LENGTH")]
+  public const uint8[] ENC_SAVE_MAGIC_NUMBER;
 
-/************* Global enumerations ***************/
+  /* Errors for m_addfriend
+   * FAERR - Friend Add Error
+   */
+  [CCode (cname = "gint32", cprefix = "TOX_FAERR_", has_type_id = false)]
+  public enum FriendAddError {
+    TOOLONG,
+    NOMESSAGE,
+    OWNKEY,
+    ALREADYSENT,
+    UNKNOWN,
+    BADCHECKSUM,
+    SETNEWNOSPAM,
+    NOMEM
+  }
 
   /* USERSTATUS -
    * Represents userstatuses someone can have.
    */
-  [CCode (cname = "TOX_USER_STATUS", cprefix = "TOX_USER_STATUS_", has_type_id = false)]
+  [CCode (cname = "TOX_USERSTATUS", cprefix = "TOX_USERSTATUS_", has_type_id = false)]
   public enum UserStatus {
     NONE,
     AWAY,
-    BUSY
-  }
-
-  /* MESSAGETYPE -
-   * Represents the type of messages a user can send, normal/action
-   */
-  [CCode (cname = "TOX_MESSAGE_TYPE", cprefix = "TOX_MESSAGE_TYPE_", has_type_id = false)]
-  public enum MessageType {
-    NORMAL,
-    ACTION
-  }  
-
-/************** Startup options *******************/
-  
-  /* PROXY_TYPE - 
-   * The type of proxy used to connect to TCP relays.
-   */
-  [CCode (cmane = "TOX_PROXY_TYPE", cprefix =  "TOX_PROXY_TYPE_", has_type_id = false)]
-  public enum ProxyType {
-      NONE,
-      HTTP,
-      SOCKS5
-  }
-
-  /* SAVEDATA_TYPE - 
-   * Type of savedata to create the Tox instance from.
-   */
-   [CCode (cname = "TOX_SAVEDATA_TYPE", cprefix = "TOX_SAVEDATA_TYPE_", has_type_id = false)]
-   public enum SavedataType {
-       NONE,
-       TOX_SAVE,
-       SECRET_KEY
-   }
-
-   /* ERR_OPTIONS_NEW -
-    * Defaults tox options.
-    */
-    [CCode (cname = "TOX_ERR_OPTIONS_NEW", cprefix = "TOX_ERR_OPTIONS_NEW_", has_type_id = false)]
-    public enum ErrOptionsNew {
-        OK,
-        MALLOC
-    }
-
-/************** Creation and Destruction **************/
-  
-  [CCode (cname = "TOX_ERR_NEW", cprefix = "TOX_ERR_NEW_", has_type_id = false)]
-  public enum ErrNew {
-      OK,
-      NULL,
-      MALLOC,
-      PORT_ALLOC,
-      PROXY_BAD_TYPE,
-      PROXY_BAD_HOST,
-      PROXY_BAD_PORT, 
-      PROXY_NOT_FOUND,
-      LOAD_ENCRYPTED,
-      LOAD_BAD_FORMAT
+    BUSY,
+    INVALID
   }
 
   /* AVATAR_FORMAT -
@@ -243,7 +197,7 @@ namespace Tox {
 
     /* Checks friend's connecting status.
      *
-     *  return 1 if friend is connected to us (Online).	
+     *  return 1 if friend is connected to us (Online).
      *  return 0 if friend is not connected to us (Offline).
      *  return -1 on failure.
      */
