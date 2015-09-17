@@ -18,6 +18,10 @@
  *    You should have received a copy of the GNU General Public License
  *    along with Venom.  If not, see <http://www.gnu.org/licenses/>.
  */
+ 
+ /*
+  * THIS IS A REFERENCE FILE, DO NOT EDIT!
+  */
 
 [CCode (cheader_filename = "tox/tox.h", cprefix = "tox_")]
 namespace Tox {
