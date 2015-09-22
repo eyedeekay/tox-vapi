@@ -408,6 +408,7 @@ namespace ToxCore {
     LOAD_BAD_FORMAT
 	}
 
+	[CCode (cname = "vala_tox_err_bootstrap")]
 	private enum TOX_ERR_BOOTSTRAP {
 		/**
      * The function returned successfully.
@@ -1184,8 +1185,6 @@ namespace ToxCore {
 		 */
 		public void restore_defaults ();
 
-		private Options? options_new (TOX_ERR_OPTIONS_NEW error);
-
 		/**
 		 * Allocates a new Tox_Options object and initialises it with the default
 		 * options.
@@ -1194,7 +1193,8 @@ namespace ToxCore {
 		 *
 		 * @return A new Tox_Options object with default options or NULL on failure.
 		 */
-		public Options? create () throws OptionError {
+		private static Options? options_new (TOX_ERR_OPTIONS_NEW error);
+		public static Options? create () throws OptionError {
 			TOX_ERR_OPTIONS_NEW err;
 			Options opts = options_new (err);
 
@@ -1384,9 +1384,8 @@ namespace ToxCore {
 		 * @return A new Tox instance pointer on success or null on failure.
 		 */
 		[CCode (cname = "tox_new")]
-		private Tox. tox_new (Options? options = null, TOX_ERR_OPTIONS_NEW error);
-
-		public Tox? create (Options? options = null)
+		private static Tox? tox_new (Options? options = null, TOX_ERR_OPTIONS_NEW error);
+		public static Tox? create (Options? options = null)
 			throws ConstructError
 		{
 			TOX_ERR_OPTIONS_NEW error;
