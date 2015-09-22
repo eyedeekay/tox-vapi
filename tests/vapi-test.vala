@@ -1,11 +1,11 @@
-using ValaToxBinding;
+using ToxCore;
 
 namespace vapitest {
   public class App : GLib.Object {
     private Tox handle;
 
-    private uint8[] USER_NAME;
-    private uint8[] USER_MOOD;
+    private string USER_NAME;
+    private string USER_MOOD;
 
     private const string BOOTSTRAP_HOST = "195.154.119.113";
     private const uint16 BOOTSTRAP_PORT = 33445;
@@ -14,20 +14,20 @@ namespace vapitest {
     // Constructor.
     public App () {
       // TODO: Initialize the whole app here.
-      this.USER_NAME = this.hexstring_to_bin ("ValaTox User");
-      this.USER_MOOD = this.hexstring_to_bin ("Happy to uses ValaTox client!");
+      this.USER_NAME = "ValaTox User";
+      this.USER_MOOD = "Happy to uses ValaTox client!";
 
       this.BOOTSTRAP_PUBKEY = this.hexstring_to_bin (
         "E398A69646B8CEACA9F0B84F553726C1C49270558C57DF5F3C368F05A7D71354"
       );
 
       // Init the Tox handle:
-      this.handle = new Tox (null, null);
+      //this.handle = Tox.create (null, null);
     }
 
     // Run the test app.
     private void run () {
-      this.init_tox_stuff ();
+      //this.init_tox_stuff ();
     }
 
     // Init our Tox related stuff.
@@ -36,7 +36,7 @@ namespace vapitest {
       this.handle.set_name (USER_NAME);
 
       // Set the user status.
-      this.handle.set_user_status (UserStatus.AWAY);
+      this.handle.status = UserStatus.AWAY;
 
       // Set the user mood. (status message)
       this.handle.set_status_message (USER_MOOD);
@@ -45,8 +45,7 @@ namespace vapitest {
       this.handle.bootstrap (
         BOOTSTRAP_HOST,
         BOOTSTRAP_PORT,
-        BOOTSTRAP_PUBKEY,
-        null
+        BOOTSTRAP_PUBKEY
       );
 
       // Iterate the Tox handle.
