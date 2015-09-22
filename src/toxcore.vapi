@@ -1829,7 +1829,7 @@ namespace ToxCore {
 			TOX_ERR_FRIEND_QUERY error
 		);
 
-		public uint8[] get_friend_name (uint32 friend_number) throws FriendGetError {
+		public string get_friend_name (uint32 friend_number) throws FriendGetError {
 			TOX_ERR_FRIEND_QUERY error;
 			size_t size = friend_get_name_size (friend_number, error);
 
@@ -1889,7 +1889,7 @@ namespace ToxCore {
 			TOX_ERR_FRIEND_QUERY error
 		);
 
-		public uint8[] get_friend_status_message (uint32 friend_number) throws FriendGetError {
+		public string get_friend_status_message (uint32 friend_number) throws FriendGetError {
 			TOX_ERR_FRIEND_QUERY error;
 			size_t size = friend_get_status_message_size (friend_number, error);
 
@@ -1897,7 +1897,7 @@ namespace ToxCore {
 				throw new FriendGetError.NOT_FOUND ("Friend number %u not found".printf (friend_number));
 			}
 
-			uint8 retval = new uint8[size];
+			uint8[] retval = new uint8[size];
 			bool val = friend_get_status_message (friend_number, retval, error);
 
 			if (!val) {
@@ -2227,8 +2227,8 @@ namespace ToxCore {
 		private bool _hash ([CCode (array_length=false)] uint8[] hash, uint8[] data);
 
 		[CCode (cname="vala_tox_hash")]
-		public uint8? hash (uint8[] data) {
-			uint8? retval = new uint8[ToxCore.HASH_LENGTH];
+		public uint8[]? hash (uint8[] data) {
+			uint8[] retval = new uint8[ToxCore.HASH_LENGTH];
 			_hash (retval, data);
 			return retval;
 		}
