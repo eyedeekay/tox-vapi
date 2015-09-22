@@ -22,7 +22,7 @@ using GLib;
 namespace ToxCore {
 	// Function from Desiderantes: https://hec.su/bFsT
 	public string arr2str (uint8[] array) {
-		uint8 name[array.length + 1];
+		uint8[] name = new uint8[array.length + 1];
 		GLib.Memory.copy (name, array, sizeof(uint8)* name.length);
 		name[array.length] = '\0';
 		return ((string) name).to_string ();
@@ -567,7 +567,9 @@ namespace ToxCore {
     /**
      * The friend_number did not designate a valid friend.
      */
-    FRIEND_NOT_FOUND
+    FRIEND_NOT_FOUND,
+
+		NOT_FOUND
 	}
 
 	private enum TOX_ERR_SET_TYPING {
@@ -915,6 +917,7 @@ namespace ToxCore {
 	public errordomain BootstrapError {
 		BAD_DATA,
 		BAD_HOST,
+		BAD_PORT
 	}
 
 	public errordomain FriendAddError {
@@ -925,12 +928,12 @@ namespace ToxCore {
 		UNKNOWN,
 		BADCHECKSUM,
 		SETNEWNOSPAM,
-		NOMEM,
+		NOMEM
 	}
 
 	public errordomain FriendGetError {
 		NOT_FOUND,
-		UNKNOWN,
+		UNKNOWN
 	}
 
 	public errordomain SendMessageError {
@@ -1181,7 +1184,7 @@ namespace ToxCore {
 		 */
 		public void restore_defaults ();
 
-		private Options? options_new (out TOX_ERR_OPTIONS_NEW error);
+		private Options? options_new (TOX_ERR_OPTIONS_NEW error);
 
 		/**
 		 * Allocates a new Tox_Options object and initialises it with the default
@@ -1191,9 +1194,9 @@ namespace ToxCore {
 		 *
 		 * @return A new Tox_Options object with default options or NULL on failure.
 		 */
-		public static Options? create () throws OptionError {
+		public Options? create () throws OptionError {
 			TOX_ERR_OPTIONS_NEW err;
-			Options opts = tox_options_new (err);
+			Options opts = options_new (err);
 
 			if (err == TOX_ERR_OPTIONS_NEW.MALLOC) {
 				throw new OptionError.NOMEM ("Unable to allocate memory for Tox.Options object.");
@@ -1243,7 +1246,7 @@ namespace ToxCore {
 		 */
 		private void self_get_address ([CCode (array_length=false)] uint8[] address);
 		public uint8[] get_address () {
-			uint8 address[ToxCore.ADDRESS_SIZE];
+			uint8[] address = new uint8[ToxCore.ADDRESS_SIZE];
 			self_get_address (address);
 			return address;
 		}
@@ -1256,7 +1259,7 @@ namespace ToxCore {
 		 */
 		private void self_get_public_key ([CCode (array_length=false)] uint8[] public_key);
 		public uint8[] get_public_key () {
-			uint8 pkey[ToxCore.PUBLIC_KEY_SIZE];
+			uint8[] pkey = new uint8[ToxCore.PUBLIC_KEY_SIZE];
 			self_get_public_key (pkey);
 			return pkey;
 		}
@@ -1269,7 +1272,7 @@ namespace ToxCore {
 		 */
 		private void self_get_secret_key ([CCode (array_length=false)] uint8[] secret_key);
 		public uint8[] get_secret_key () {
-			uint8 skey[ToxCore.SECRET_KEY_SIZE];
+			uint8[] skey = new uint8[ToxCore.SECRET_KEY_SIZE];
 			self_get_secret_key (skey);
 			return skey;
 		}
@@ -1314,7 +1317,7 @@ namespace ToxCore {
 		private void self_get_name ([CCode (array_length = false)] uint8[] name);
 		private size_t self_get_name_size ();
 		public string get_name () {
-			uint8 name[self_get_name_size ()];
+			uint8[] name = new uint8[self_get_name_size ()];
 			self_get_name (name);
 			return arr2str (name);
 		}
@@ -1359,7 +1362,7 @@ namespace ToxCore {
 		private void self_get_status_message ([CCode (array_length=false)] uint8[] status_message);
 		public string get_status_message () {
 			size_t size = self_get_status_message_size ();
-			uint8 status[size];
+			uint8[] status = new uint8[size];
 			self_get_status_message (status);
 			return arr2str (status);
 		}
@@ -1488,7 +1491,7 @@ namespace ToxCore {
 			string address,
 			uint16 port,
 			[CCode (array_length=false)] uint8[] public_key,
-			out TOX_ERR_BOOTSTRAP error
+			TOX_ERR_BOOTSTRAP error
 		);
 
 		[CCode (cname="vala_tox_add_tcp_relay")]
@@ -1580,29 +1583,29 @@ namespace ToxCore {
 		private uint32 friend_add (
 			[CCode (array_length=false)] uint8[] address,
 			uint8[] message,
-			out TOX_ERR_FRIEND_ADD error
+			TOX_ERR_FRIEND_ADD error
 		);
 
 		public uint32 add_friend (uint8[] address, string message)
 			throws FriendAddError
 			requires (message.data.length <= ToxCore.MAX_FRIEND_REQUEST_LENGTH)
 			requires (message.data.length > 0)
-			requires (address.length = ToxCore.ADDRESS_SIZE)
+			requires (address.length == ToxCore.ADDRESS_SIZE)
 		{
 			TOX_ERR_FRIEND_ADD error;
-			friend_number = friend_add (address, message.data, error);
+			uint32 friend_number = friend_add (address, message.data, error);
 
 			switch (error) {
-				case TOX_ERR_FRIEND_ADD.OWNKEY:
-					throw new FriendAddError.OWN_KEY ("The provided key is the same client key");
+				case TOX_ERR_FRIEND_ADD.OWN_KEY:
+					throw new FriendAddError.OWNKEY ("The provided key is the same client key");
 					break;
-				case TOX_ERR_FRIEND_ADD.ALREADYSENT:
-					throw new FriendAddError.ALREADY_SENT ("The provided key belongs to an already addede friend");
+				case TOX_ERR_FRIEND_ADD.ALREADY_SENT:
+					throw new FriendAddError.ALREADYSENT ("The provided key belongs to an already addede friend");
 					break;
-				case TOX_ERR_FRIEND_ADD.BADCHECKSUM:
-					throw new FriendAddError.BAD_CHECKSUM ("Checksum was invalid");
+				case TOX_ERR_FRIEND_ADD.BAD_CHECKSUM:
+					throw new FriendAddError.BADCHECKSUM ("Checksum was invalid");
 					break;
-				case TOX_ERR_FRIEND_ADD.SETNEWNOSPAM:
+				case TOX_ERR_FRIEND_ADD.SET_NEW_NOSPAM:
 					throw new FriendAddError.SETNEWNOSPAM ("Client was already added, changed the nospam value");
 					break;
 				case TOX_ERR_FRIEND_ADD.MALLOC:
@@ -1634,28 +1637,32 @@ namespace ToxCore {
 		 * @return the friend number on success, UINT32_MAX on failure.
 		 * @see tox_friend_add for a more detailed description of friend numbers.
 		 */
-		private uint32 friend_add_norequest ([CCode (array_length=false)] uint8[] public_key, out TOX_ERR_FRIEND_ADD error);
+		private uint32 friend_add_norequest (
+			[CCode (array_length=false)] uint8[] public_key,
+			TOX_ERR_FRIEND_ADD error
+		);
+
 		public uint32 add_friend_norequest (uint8[] public_key) throws FriendAddError {
 			TOX_ERR_FRIEND_ADD error;
 			uint32 friend_number = friend_add_norequest (public_key, error);
 
 			switch (error) {
 				case TOX_ERR_FRIEND_ADD.OWN_KEY:
-					throw new FriendAddError.OWN_KEY("The provided key is the same client key");
+					throw new FriendAddError.OWNKEY ("The provided key is the same client key");
 					break;
 				case TOX_ERR_FRIEND_ADD.ALREADY_SENT:
-					throw new FriendAddError.ALREADY_SENT("The provided key belongs to an already addede friend");
+					throw new FriendAddError.ALREADYSENT ("The provided key belongs to an already addede friend");
 					break;
 				case TOX_ERR_FRIEND_ADD.BAD_CHECKSUM:
-					throw new FriendAddError.BAD_CHECKSUM("Checksum was invalid");
+					throw new FriendAddError.BADCHECKSUM ("Checksum was invalid");
 					break;
 				case TOX_ERR_FRIEND_ADD.SET_NEW_NOSPAM:
-					throw new FriendAddError.SET_NEW_NOSPAM("Client was already added, changed the nospam value");
+					throw new FriendAddError.SETNEWNOSPAM ("Client was already added, changed the nospam value");
 					break;
 				case TOX_ERR_FRIEND_ADD.MALLOC:
-					throw new FriendAddError.NOMEM("Error allocating the friend request");
+					throw new FriendAddError.NOMEM ("Error allocating the friend request");
 				default:
-					throw new FriendAddError.UNKNOWN("Unknown error, please check the request parameters");
+					throw new FriendAddError.UNKNOWN ("Unknown error, please check the request parameters");
 					break;
 			}
 
@@ -1673,7 +1680,7 @@ namespace ToxCore {
 		 *
 		 * @return true on success.
 		 */
-		private bool friend_delete (uint32 friend_number, out TOX_ERR_FRIEND_DELETE error);
+		private bool friend_delete (uint32 friend_number, TOX_ERR_FRIEND_DELETE error);
 		public bool delete_friend (uint32 friend_number) {
 			TOX_ERR_FRIEND_DELETE error;
 			return friend_delete (friend_number, error);
@@ -1693,7 +1700,7 @@ namespace ToxCore {
   	 */
 		private uint32 friend_by_public_key (
 			[CCode (array_length=false)] uint8[] public_key,
-			out TOX_ERR_FRIEND_BY_PUBLIC_KEY error
+			TOX_ERR_FRIEND_BY_PUBLIC_KEY error
 		);
 
 		public uint32 get_friend_by_public_key (uint8[] public_key) throws FriendGetError {
@@ -1736,7 +1743,7 @@ namespace ToxCore {
 		private void self_get_friend_list ([CCode (array_length = false)] uint32[] friend_list);
 
 		public uint32[] get_friend_list () {
-			uint32 retval[self_get_friend_list_size ()];
+			uint32[] retval = new uint32[self_get_friend_list_size ()];
 			self_get_friend_list (retval);
 			return retval;
 		}
@@ -1753,12 +1760,12 @@ namespace ToxCore {
 		private bool friend_get_public_key (
 			uint32 friend_number,
 			[CCode (array_length=false)] uint8[] public_key,
-			out TOX_ERR_FRIEND_GET_PUBLIC_KEY error
+			TOX_ERR_FRIEND_GET_PUBLIC_KEY error
 		);
 
 		public uint8[] get_friend_public_key (uint32 friend_number) {
 			TOX_ERR_FRIEND_GET_PUBLIC_KEY error;
-			uint8[] retval[ToxCore.PUBLIC_KEY_SIZE];
+			uint8[] retval = new uint8[ToxCore.PUBLIC_KEY_SIZE];
 			bool friend_pkey = friend_get_public_key (friend_number, retval, error);
 
 			if (!friend_pkey) {
@@ -1774,7 +1781,7 @@ namespace ToxCore {
 		 *
 		 * @param friend_number The friend number you want to query.
 		 */
-		private uint64 friend_get_last_online (uint32 friend_number, out TOX_ERR_FRIEND_GET_LAST_ONLINE error);
+		private uint64 friend_get_last_online (uint32 friend_number, TOX_ERR_FRIEND_GET_LAST_ONLINE error);
 		public uint64 get_friend_last_online (uint32 friend_number) throws FriendGetError {
 			TOX_ERR_FRIEND_GET_LAST_ONLINE error;
 			uint64 retval = friend_get_last_online (friend_number, error);
@@ -1800,7 +1807,7 @@ namespace ToxCore {
 		 * The return value is equal to the `length` argument received by the last
 		 * `friend_name` callback.
 		 */
-		private size_t friend_get_name_size (uint32 friend_number, out TOX_ERR_FRIEND_QUERY error);
+		private size_t friend_get_name_size (uint32 friend_number, TOX_ERR_FRIEND_QUERY error);
 
 		/**
 		 * Write the name of the friend designated by the given friend number to a byte
@@ -1830,8 +1837,8 @@ namespace ToxCore {
 				throw new FriendGetError.NOT_FOUND ("Friend number %u is invalid".printf (friend_number));
 			}
 
-			uint8 name[size];
-			bool val = friend_get_name (friend_number, name);
+			uint8[] name = new uint8[size];
+			bool val = friend_get_name (friend_number, name, error);
 
 			if (!val) {
 				throw new FriendGetError.UNKNOWN ("Unknown error on getting the name.");
@@ -1879,7 +1886,7 @@ namespace ToxCore {
 		private bool friend_get_status_message (
 			uint32 friend_number,
 			[CCode (array_length=false)] uint8[] status_message,
-			out TOX_ERR_FRIEND_QUERY error
+			TOX_ERR_FRIEND_QUERY error
 		);
 
 		public uint8[] get_friend_status_message (uint32 friend_number) throws FriendGetError {
@@ -1890,7 +1897,7 @@ namespace ToxCore {
 				throw new FriendGetError.NOT_FOUND ("Friend number %u not found".printf (friend_number));
 			}
 
-			uint8[] retval[size];
+			uint8 retval = new uint8[size];
 			bool val = friend_get_status_message (friend_number, retval, error);
 
 			if (!val) {
@@ -2221,7 +2228,7 @@ namespace ToxCore {
 
 		[CCode (cname="vala_tox_hash")]
 		public uint8? hash (uint8[] data) {
-			uint8? retval[ToxCore.HASH_LENGTH];
+			uint8? retval = new uint8[ToxCore.HASH_LENGTH];
 			_hash (retval, data);
 			return retval;
 		}
@@ -2363,7 +2370,7 @@ namespace ToxCore {
 
 		public uint8[] get_file_id (uint32 friend_number, uint32 file_number) throws FileGetError {
 			TOX_ERR_FILE_GET error;
-			uint8 retval[ToxCore.FILE_ID_LENGTH];
+			uint8[] retval = new uint8[ToxCore.FILE_ID_LENGTH];
 			bool res = file_get_file_id (friend_number, file_number, retval, error);
 
 			if (!res) {
@@ -2453,14 +2460,14 @@ namespace ToxCore {
 			uint64 file_size,
 			[CCode (array_length=false)] uint8[]? file_id,
 			uint8[] filename,
-			out TOX_ERR_FILE_SEND error
+			TOX_ERR_FILE_SEND error
 		);
 
 		public uint32 send_file (
 			uint32 friend_number,
 			FileKind kind,
 			uint64 file_size,
-			owned uint8[]? file_id[ToxCore.FILE_ID_LENGTH],
+			uint8[]? file_id = new uint8[ToxCore.FILE_ID_LENGTH],
 			string filename
 		)
 			throws FileSeekError
