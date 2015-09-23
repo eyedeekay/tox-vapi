@@ -15,7 +15,6 @@
 *
 *		0. You just DO WHAT THE FUCK YOU WANT TO.
 */
-
 using GLib;
 
 [CCode (cheader_filename = "tox/tox.h", cprefix = "Tox_")]
@@ -39,20 +38,20 @@ namespace Tox {
 		 * The major version number. Incremented when the API or ABI changes in an
 		 * incompatible way.
 		 */
-		public uint32 MAJOR;
+		public const uint32 MAJOR;
 
 		/**
 		 * The minor version number. Incremented when functionality is added without
 		 * breaking the API or ABI. Set to 0 when the major version number is
 		 * incremented.
 		 */
-		public uint32 MINOR;
+		public const uint32 MINOR;
 
 		/**
 		 * The patch or revision number. Incremented when bugfixes are applied without
 		 * changing any functionality or API or ABI.
 		 */
-		public uint32 PATCH;
+		public const uint32 PATCH;
 
 		/**
 		 * A macro to check at preprocessing time whether the client code is compatible
@@ -345,6 +344,67 @@ namespace Tox {
 	 * :: Private errors enums
 	 *
 	 ******************************************************************************/
+
+	[CCode (cname="TOX_ERR_NEW", cprefix = "TOX_ERR_NEW_")]
+	public enum TOX_ERR_NEW {
+		/**
+		 * The function returned successfully.
+		 */
+		OK,
+
+		/**
+		 * One of the arguments to the function was NULL when it was not expected.
+		 */
+		NULL,
+
+		/**
+		 * The function was unable to allocate enough memory to store the internal
+		 * structures for the Tox object.
+		 */
+		MALLOC,
+
+		/**
+		 * The function was unable to bind to a port. This may mean that all ports
+		 * have already been bound, e.g. by other Tox instances, or it may mean
+		 * a permission error. You may be able to gather more information from errno.
+		 */
+		PORT_ALLOC,
+
+		/**
+		 * proxy_type was invalid.
+		 */
+		PROXY_BAD_TYPE,
+
+		/**
+		 * proxy_type was valid but the proxy_host passed had an invalid format
+		 * or was NULL.
+		 */
+		PROXY_BAD_HOST,
+
+		/**
+		 * proxy_type was valid, but the proxy_port was invalid.
+		 */
+		PROXY_BAD_PORT,
+
+		/**
+		 * The proxy address passed could not be resolved.
+		 */
+		PROXY_NOT_FOUND,
+
+		/**
+		 * The byte array to be loaded contained an encrypted save.
+		 */
+		LOAD_ENCRYPTED,
+
+		/**
+		 * The data format was invalid. This can happen when loading data that was
+		 * saved by an older version of Tox, or when the data has been corrupted.
+		 * When loading from badly formatted data, some data may have been loaded,
+		 * and the rest is discarded. Passing an invalid length parameter also
+		 * causes this error.
+		 */
+		LOAD_BAD_FORMAT,
+	}
 
 	[CCode (cprefix="")]
 	private enum TOX_ERR_OPTIONS_NEW {
@@ -1231,7 +1291,7 @@ namespace Tox {
 	[Compact]
 	public class Tox {
 
-		public Tox () {}
+		//public Tox () {}
 
 		/*******************************************************************************
 		 *
@@ -1401,36 +1461,36 @@ namespace Tox {
 		 * @return A new Tox instance pointer on success or null on failure.
 		 */
 		[CCode (cname = "tox_new")]
-		private Tox? tox_new (Options? options = null, TOX_ERR_OPTIONS_NEW error);
-		public Tox? create (Options? options = null)
+		private Tox tox_new (Options? options = null, out TOX_ERR_NEW? error = null);
+		public Tox (Options? options = null)
 			throws ConstructError
 		{
-			TOX_ERR_OPTIONS_NEW error;
-			Tox? handle = tox_new (options, error);
+			TOX_ERR_NEW error;
+			tox_new (options, out error);
 
 			switch (error) {
-				case TOX_ERR_OPTIONS_NEW.NULL:
+				case TOX_ERR_NEW.NULL:
 					throw new ConstructError.UNKNOWN ("A parameter was null");
 					break;
-				case TOX_ERR_OPTIONS_NEW.MALLOC:
+				case TOX_ERR_NEW.MALLOC:
 					throw new ConstructError.UNKNOWN ("Unable to allocate memory for the Tox instance");
 					break;
-				case TOX_ERR_OPTIONS_NEW.PORT_ALLOC:
+				case TOX_ERR_NEW.PORT_ALLOC:
 					throw new ConstructError.BAD_PORT_ALLOC ("%s: Unable to seize the received port".printf (error.to_string ()));
 					break;
-				case TOX_ERR_OPTIONS_NEW.PROXY_BAD_HOST:
+				case TOX_ERR_NEW.PROXY_BAD_HOST:
 					throw new ConstructError.BAD_HOST ("Invalid host (host was %s)".printf ((options.proxy_host ?? "null")));
 					break;
-				case TOX_ERR_OPTIONS_NEW.PROXY_BAD_PORT:
+				case TOX_ERR_NEW.PROXY_BAD_PORT:
 					throw new ConstructError.PORT_UNAVAILABLE ("Port not available (%s)".printf (options.proxy_port.to_string ()));
 					break;
-				case TOX_ERR_OPTIONS_NEW.PROXY_NOT_FOUND:
+				case TOX_ERR_NEW.PROXY_NOT_FOUND:
 					throw new ConstructError.PROXY_NOT_FOUND ("Unable to connect to the proxy (TYPE_%s : %s)".printf (options.proxy_type.to_string (), options.proxy_host ?? "null"));
 					break;
-				case TOX_ERR_OPTIONS_NEW.LOAD_ENCRYPTED:
+				case TOX_ERR_NEW.LOAD_ENCRYPTED:
 					throw new ConstructError.ENCRYPTED_DATA ("Data was unexpectedly encrypted or looks encrypted");
 					break;
-				case TOX_ERR_OPTIONS_NEW.LOAD_BAD_FORMAT:
+				case TOX_ERR_NEW.LOAD_BAD_FORMAT:
 					throw new ConstructError.MALFORMED_DATA ("Data was not properly formatted");
 					break;
 				default:
@@ -1438,7 +1498,7 @@ namespace Tox {
 					break;
 			}
 
-			return handle;
+			//return handle;
 		}
 
 		/*******************************************************************************
