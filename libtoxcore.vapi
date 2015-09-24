@@ -15,7 +15,6 @@
 *
 *       0. You just DO WHAT THE FUCK YOU WANT TO.
 */
-using GLib;
 
 [CCode (cheader_filename = "tox/tox.h", cprefix = "Tox_")]
 namespace Tox {
