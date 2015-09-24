@@ -65,7 +65,7 @@ namespace Tox {
 		 * the installed version of
 		 */
 		[CCode (cname="TOX_VERSION_REQUIRE")]
-		public char require_version (uint32 major, uint32 minor, uint32 patch);
+		public static char require_version (uint32 major, uint32 minor, uint32 patch);
 
 		/**
 		 * Return the major version number of the library. Can be used to display the
@@ -73,33 +73,33 @@ namespace Tox {
 		 * dynamically linked version of
 		 */
 		[CCode (cname="tox_version_major")]
-		public uint32 lib_major ();
+		public static uint32 lib_major ();
 
 		/**
 		 * Return the minor version number of the library.
 		 */
 		[CCode (cname="tox_version_minor")]
-		public uint32 lib_minor ();
+		public static uint32 lib_minor ();
 
 		/**
 		 * Return the patch number of the library.
 		 */
 		[CCode (cname="tox_version_patch")]
-		public uint32 lib_patch ();
+		public static uint32 lib_patch ();
 
 		/**
 		 * Return whether the compiled library version is compatible with the passed
 		 * version numbers.
 		 */
 		[CCode (cname="tox_version_is_compatible")]
-		public bool is_compatible (uint32 major, uint32 minor, uint32 patch);
+		public static bool is_compatible (uint32 major, uint32 minor, uint32 patch);
 
 		/**
 		 * A convenience macro to call tox_version_is_compatible with the currently
 		 * compiling API version.
 		 */
 		[CCode (cname="TOX_VERSION_IS_ABI_COMPATIBLE")]
-		public bool is_abi_compatible ();
+		public static bool is_abi_compatible ();
 	}
 
 	/*******************************************************************************
