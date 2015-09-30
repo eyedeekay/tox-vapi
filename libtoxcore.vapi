@@ -467,7 +467,7 @@ namespace Tox {
     }
 
     [CCode (cname="TOX_ERR_BOOTSTRAP", cprefix="TOX_ERR_BOOTSTRAP_")]
-    private enum TOX_ERR_BOOTSTRAP {
+    public enum TOX_ERR_BOOTSTRAP {
         /**
         * The function returned successfully.
         */
@@ -1522,20 +1522,20 @@ namespace Tox {
         * @return true on success.
         */
         [CCode (cname="tox_bootstrap")]
-        private bool _bootstrap (
+        public bool _bootstrap (
             string address,
             uint16 port,
             [CCode (array_length=false)] uint8[] public_key,
-            TOX_ERR_BOOTSTRAP error
+            out TOX_ERR_BOOTSTRAP error
         );
 
-        [CCode (cname="vala_tox_bootstrap")]
-        public void bootstrap (string address, uint16 port, uint8[] public_key) throws BootstrapError {
+        [CCode (cname="bootstrap", cprefix="")]
+        public void bootstrap (string address, uint16 port, uint8[] public_key) {
             TOX_ERR_BOOTSTRAP error;
-            bool result = _bootstrap (address, port, public_key, error);
+            bool result = _bootstrap (address, port, public_key, out error);
 
             if (!result) {
-                switch (error) {
+                /*switch (error) {
                 case TOX_ERR_BOOTSTRAP.BAD_HOST:
                     throw new BootstrapError.BAD_HOST("Host %s is invalid.".printf (address));
                     break;
@@ -1545,7 +1545,7 @@ namespace Tox {
                 default:
                     throw new BootstrapError.BAD_HOST("Unable to connect, please check bootstrap parameters");
                     break;
-                }
+                }*/
             }
         }
 
