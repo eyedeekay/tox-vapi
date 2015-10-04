@@ -1,2 +1,5 @@
 # astyle backup files
 *.orig
+
+# binary
+Bot
