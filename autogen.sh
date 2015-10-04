@@ -18,6 +18,7 @@ valac \
 --thread \
 Bot.vala \
 -o Bot \
+-X -fsanitize=address \
 --disable-warnings --verbose --debug \
 
 if [ -f "./Bot" ]

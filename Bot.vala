@@ -33,16 +33,39 @@ namespace ToxVapi {
       );
 
       this.handle = new Tox.Tox (null, null);
-      this.handle.self_set_name (Tools.hex2bin("NOOB."), null);
+      // Start the tox thread.
+      this.launch_thread ();
 
-      uint8[] name = new uint8[Tox.MAX_NAME_LENGTH];
+      var user_name = this.BOT_NAME.data;
+      this.handle.self_set_name (user_name, null);
+
+      uint8[] name = new uint8[this.handle.self_get_name_size ()];
       this.handle.self_get_name (name);
-      stdout.printf("Tox name: %s\n", Tools.bin2hex(name));
+      stdout.printf("Tox name: %s\n", Tools.bin2nullterm (name));
 
+      // Dirty way to bootstrap.
       this.handle.bootstrap (
         "195.154.119.113",
         33445,
         Tools.hex2bin ("E398A69646B8CEACA9F0B84F553726C1C49270558C57DF5F3C368F05A7D71354"),
+        null
+      );
+      this.handle.bootstrap (
+        "144.76.60.215",
+        33445,
+        Tools.hex2bin ("04119E835DF3E78BACF0F84235B300546AF8B936F035185E2A8E9E0A67C8924F"),
+        null
+      );
+      this.handle.bootstrap (
+        "205.185.116.116",
+        33445,
+        Tools.hex2bin ("A179B09749AC826FF01F37A9613F6B57118AE014D4196A0E1105A98F93A54702"),
+        null
+      );
+      this.handle.bootstrap (
+        "212.71.252.109",
+        33445,
+        Tools.hex2bin ("C4CEB8C7AC607C6B374E2E782B3C00EA3A63B80D4910B8649CCACDD19F260819"),
         null
       );
 
@@ -50,26 +73,24 @@ namespace ToxVapi {
       this.handle.self_get_address (toxid);
       stdout.printf("ToxID: %s\n", Tools.bin2hex (toxid));
 
-      /*Tox.Tox.FriendMessageCallback(this.on_friend_message_callback);
-      this.handle.on_friend_message (callback);*/
-      this.handle.friend_message_callback (callback_friend_message);
-      this.handle.friend_request_callback (callback_friend_request);
-      this.launch_thread ();
-    }
+      // Adding a friend
+      var friend_toxid = Tools.hex2bin ("DFB4958A86122ACF81BB852DBC767DB8A3A7281A8EDBC83121B30C294E295869121B298FEEA2");
+      var message = "Add me plz ?";
+      stdout.printf("Sending a friend request to %s: \"%s\"\n", Tools.bin2hex (friend_toxid), message);
+      this.handle.friend_add (friend_toxid, Tools.hex2bin (message), null);
 
-    public void on_friend_message_callback (Tox.Tox handle, int friend_number, MessageType type, uint8[] message)
-      requires(message != null)
-    {
-      string message_string = Tools.bin2nullterm (message);
-      Idle.add(() => {
-        stdout.printf ("Friend number %d: %s", friend_number, message_string);
-        return true;
-      });
+      // Callbacks.
+      this.handle.connection_status_callback (this.on_connection_status);
+      this.handle.friend_message_callback (this.on_friend_message);
+      this.handle.friend_request_callback (this.on_friend_request);
+      this.handle.friend_status_callback (this.on_friend_status);
+
+      int result = this.tox_thread.join ();
     }
 
     public void launch_thread () {
       this.tox_thread = new Thread<int> ("tox-bg-thread", this.tox_bg_thread);
-      int result = this.tox_thread.join ();
+      //
     }
     public int tox_bg_thread () {
       this.is_running = true;
@@ -85,14 +106,47 @@ namespace ToxVapi {
       return 0;
     }
 
-    public void callback_friend_message (uint32 friend_number, MessageType type, uint8[] message) {
-      string message_str = Tools.bin2nullterm (message);
-      stdout.printf("%u: %s", friend_number, message_str);
+    public void on_connection_status (Tox.ConnectionStatus status) {
+      if (status != Tox.ConnectionStatus.NONE) {
+        stdout.printf("Connected to Tox...");
+      } else {
+        stdout.printf("Disconnected of Tox...");
+      }
     }
 
-    public void callback_friend_request (uint8[] public_key, uint8[] message) {
-      stdout.printf("Got a request from %s, accepted.", Tools.bin2nullterm(public_key));
-      handle.friend_add_norequest (public_key, null);
+    public void on_friend_message (uint32 friend_number, Tox.MessageType type, uint8[] message) {
+      string message_string = (string) message;
+      uint8[] result = new uint8[Tox.MAX_NAME_LENGTH];
+      this.handle.friend_get_name (friend_number, result, null);
+      stdout.printf ("%s: %s", (string) result, message_string);
+    }
+
+    public void on_friend_request (uint8[] public_key, uint8[] message) {
+      stdout.printf("Received a friend request from %s.", (string) public_key);
+      this.handle.friend_add_norequest (public_key, null);
+    }
+
+    public void on_friend_status (uint32 friend_number, UserStatus status) {
+      uint8[] result = new uint8[Tox.MAX_NAME_LENGTH];
+      var name = this.handle.friend_get_name (friend_number, result, null);
+      string _status = "Offline";
+
+      switch (status) {
+      case UserStatus.NONE:
+        _status = "Online";
+        break;
+      case UserStatus.AWAY:
+        _status = "Away";
+        break;
+      case UserStatus.BUSY:
+        _status = "Busy";
+        break;
+      default:
+        _status = "Offline";
+        break;
+      }
+
+      stdout.printf("%s is now %s", Tools.bin2nullterm (result), _status);
     }
   }
 
@@ -134,6 +188,12 @@ namespace ToxVapi {
         }
       }
       return sb.str;
+    }
+    public static string arr2str (uint8[] array) {
+      uint8[] name = new uint8[array.length + 1];
+      GLib.Memory.copy (name, array, sizeof(uint8) * name.length);
+      name[array.length] = '\0';
+      return ((string) name).to_string ();
     }
   }
 }
