@@ -1,2 +1,2 @@
 style:
-	astyle --options=astylerc toxcore.vapi
+	astyle --options=astylerc vapi/libtoxcore.vapi Bot.vala

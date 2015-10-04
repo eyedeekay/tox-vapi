@@ -10,7 +10,6 @@ namespace ToxVapi {
     private bool is_connected = false;
 
     public void Bot () {}
-
     public int run () {
       stdout.printf("Starting bot...\n");
 
@@ -28,7 +27,22 @@ namespace ToxVapi {
       );
 
       var handle = new Tox.Tox (null, null);
+      handle.bootstrap (
+        "195.154.119.113",
+        33445,
+        hex2bin ("E398A69646B8CEACA9F0B84F553726C1C49270558C57DF5F3C368F05A7D71354"),
+        null
+      );
+    }
 
+    public uint8[] hex2bin (string s) {
+      uint8[] buf = new uint8[s.length / 2];
+      for (int i = 0; i < buf.length; ++i) {
+        int b = 0;
+        s.substring (2*i, 2).scanf ("%02x", ref b);
+        buf[i] = (uint8)b;
+      }
+      return buf;
     }
   }
 }
