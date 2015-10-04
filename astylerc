@@ -1,4 +1,3 @@
 indent-namespaces
 convert-tabs
-indent=spaces=4
-
+indent=spaces=2
