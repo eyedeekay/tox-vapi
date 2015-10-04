@@ -1017,7 +1017,7 @@ namespace Tox {
   [Compact]
   public class Tox {
     // Signals.
-    [CCode (cname="tox_friend_name_cb")]
+    /*[CCode (cname="tox_friend_name_cb")]
     public signal void on_friend_name (uint32 friend_number, uint8[] name);
     [CCode (cname="tox_friend_status_message_cb")]
     public signal void on_friend_status_message (uint32 friend_number, uint8[] message);
@@ -1040,31 +1040,68 @@ namespace Tox {
     [CCode (cname = "tox_file_recv_cb")]
     public signal void on_file_recv (uint32 friend_number, uint32 file_number, FileKind kind, uint64 file_size, uint8[] filename);
     [CCode (cname = "tox_file_recv_chunk_cb")]
-    public signal void on_file_recv_chunk (uint32 friend_number, uint32 file_number, uint64 position, uint8[] data);
+    public signal void on_file_recv_chunk (uint32 friend_number, uint32 file_number, uint64 position, uint8[] data);*/
 
     // TODO: DELEGATES TEST.
-    /**
-     * @param friend_number The friend number of the friend who sent the message.
-     * @param time_delta Time between composition and sending.
-     * @param message The message data they sent.
-     * @param length The size of the message byte array.
-     *
-     * @see friend_request for more information on time_delta.
-     */
-    [CCode (cname="tox_friend_message_cb", has_target=false, has_type_id=false)]
-    public delegate void FriendMessageFunc (
-        uint32 friend_number,
-        MessageType type,
-        uint8[] message
-    );
+    [CCode (cname="tox_friend_name_cb", has_target=true, has_type_id=false)]
+    public delegate void FriendNameFunc (uint32 friend_number, uint8[] name);
+    [CCode (cname="tox_callback_friend_name")]
+    public void friend_name_callback (FriendNameFunc callback);
 
-    /**
-     * Set the callback for the `friend_message` event. Pass NULL to unset.
-     *
-     * This event is triggered when a message from a friend is received.
-     */
+    [CCode (cname="tox_friend_status_message_cb", has_target=true, has_type_id=false)]
+    public delegate void FriendStatusMessageFunc (uint32 friend_number, uint8[] message);
+    [CCode (cname="tox_callback_friend_status_message")]
+    public void friend_status_message_callback (FriendStatusMessageFunc callback);
+
+    [CCode (cname="tox_friend_status_cb", has_target=true, has_type_id=false)]
+    public delegate void FriendStatusFunc (uint32 friend_number, UserStatus status);
+    [CCode (cname="tox_callback_friend_status")]
+    public void friend_status_callback (FriendStatusFunc callback);
+
+    [CCode (cname="tox_friend_connection_status_cb", has_target=true, has_type_id=false)]
+    public delegate void FriendConnectionStatusFunc (uint32 friend_number, ConnectionStatus status);
+    [CCode (cname="tox_callback_friend_connection_status")]
+    public void friend_connection_status_callback (FriendConnectionStatusFunc callback);
+
+    [CCode (cname = "tox_friend_typing_cb", has_target=true, has_type_id=false)]
+    public delegate void FriendTypingFunc (uint32 friend_number, bool is_typing);
+    [CCode (cname="tox_callback_friend_typing")]
+    public void friend_typing_callback (FriendTypingFunc callback);
+
+    [CCode (cname = "tox_friend_read_receipt_cb", has_target=true, has_type_id=false)]
+    public delegate void ReadReceiptFunc(uint32 friend_number, uint32 message_id);
+    [CCode (cname="tox_callback_friend_read_receipt")]
+    public void friend_read_receipt_callback (ReadReceiptFunc callback);
+
+    [CCode (cname="tox_friend_request_cb", has_target=true, has_type_id=false)]
+    public delegate void FriendRequestFunc ([CCode (array_length = false)] uint8 public_key, uint8[] message);
+    [CCode (cname="tox_callback_friend_request")]
+    public void friend_request_callback (FriendRequestFunc callback);
+
+    [CCode (cname="tox_friend_message_cb", has_target=true, has_type_id=false)]
+    public delegate void FriendMessageFunc (uint32 friend_number, MessageType type, uint8[] message);
     [CCode (cname="tox_callback_friend_message")]
-    public void friend_message (FriendMessageFunc callback);
+    public void friend_message_callback (FriendMessageFunc callback);
+
+    [CCode (cname = "tox_file_recv_control_cb", has_target=true, has_type_id=false)]
+    public delegate void FileControlReceiveFunc (uint32 friend_number, uint32 file_number, FileControlStatus status);
+    [CCode (cname = "tox_callback_file_recv_control")]
+    public void file_recv_control_callback (FileControlReceiveFunc callback);
+
+    [CCode (cname = "tox_file_chunk_request_cb", has_target=true, has_type_id=false)]
+    public delegate void FileChunkRequestFunc (uint32 friend_number, uint32 file_number, uint64 position, size_t length);
+    [CCode (cname = "tox_callback_file_chunk_request")]
+    public void file_chunk_request_callback (FileChunkRequestFunc callback);
+
+    [CCode (cname = "tox_file_recv_cb", has_target=true, has_type_id=false)]
+    public delegate void FileRecvFunc (uint32 friend_number, uint32 file_number, FileKind kind, uint64 file_size, uint8[] filename);
+    [CCode (cname = "tox_callback_file_recv")]
+    public void file_recv_callback (FileRecvFunc callback);
+
+    [CCode (cname = "tox_file_recv_chunk_cb", has_target=true, has_type_id=false)]
+    public delegate void FileRecvChunkFunc (uint32 friend_number, uint32 file_number, uint64 position, uint8[] data);
+    [CCode (cname = "tox_callback_file_recv_chunk")]
+    public void file_recv_chunk_callback (FileRecvChunkFunc callback);
 
     // Methods.
     [CCode (cname="tox_new")]

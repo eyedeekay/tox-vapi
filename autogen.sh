@@ -18,7 +18,7 @@ valac \
 --thread \
 Bot.vala \
 -o Bot \
---verbose --debug \
+--disable-warnings --verbose --debug \
 
 if [ -f "./Bot" ]
 then
