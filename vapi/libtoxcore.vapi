@@ -222,7 +222,7 @@ namespace Tox {
     PAUSE,
     CANCEL,
   }
-  
+
   [CCode (cname="TOX_FILE_KIND", cprefix="TOX_FILE_KIND_", has_type_id=false)]
   public enum FileKind {
     /**
@@ -1048,7 +1048,7 @@ namespace Tox {
     public void friend_read_receipt_callback (ReadReceiptFunc callback);
 
     [CCode (cname="tox_friend_request_cb", has_target=true, has_type_id=false)]
-    public delegate void FriendRequestFunc (Tox self, [CCode (array_length = false)] uint8[] public_key, uint8[] message);
+    public delegate void FriendRequestFunc (Tox self, [CCode (array_length=false)] uint8[] public_key, uint8[] message);
     [CCode (cname="tox_callback_friend_request")]
     public void friend_request_callback (FriendRequestFunc callback);
 
@@ -1081,6 +1081,12 @@ namespace Tox {
     public delegate void ConnectionStatusFunc (Tox self, ConnectionStatus status);
     [CCode (cname="tox_callback_self_connection_status")]
     public void connection_status_callback (ConnectionStatusFunc callback);
+
+    // Properties.
+    /*public uint8 name {
+      [CCode (cname="tox_self_get_address"] get;
+      private set;
+    }*/
 
     // Methods.
     [CCode (cname="tox_new")]

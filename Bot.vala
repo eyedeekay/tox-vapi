@@ -91,13 +91,22 @@ namespace ToxVapi {
     public void on_friend_message (Tox.Tox handle, uint32 friend_number, Tox.MessageType type, uint8[] message) {
       string message_string = (string) message;
       uint8[] result = new uint8[Tox.MAX_NAME_LENGTH];
-      handle.friend_get_name (friend_number, result, null);
+      this.handle.friend_get_name (friend_number, result, null);
       print ("%s: %s\n", (string) result, message_string);
+
+      switch (message_string) {
+        case "help":
+          var response = "Hi u', I'm a super simple bot made by SkyzohKey. I run with Vala ! :D";
+          this.handle.friend_send_message (friend_number, MessageType.NORMAL, response.data, null);
+          break;
+      }
     }
 
     public void on_friend_request (Tox.Tox handle, uint8[] public_key, uint8[] message) {
-      print ("Received a friend request from %s.\n", (string) public_key);
-      handle.friend_add_norequest (public_key, null);
+      public_key.length = Tox.PUBLIC_KEY_SIZE; // Fix an issue with Vala.
+      var pkey = Tools.bin2hex (public_key);
+      print ("Received a friend request from %s.\n", pkey);
+      this.handle.friend_add_norequest (public_key, null);
     }
 
     public void on_friend_status (Tox.Tox handle, uint32 friend_number, UserStatus status) {
