@@ -29,9 +29,9 @@ namespace ToxVapi {
       var handle = new Tox.Tox (null, null);
       handle.self_set_name (hex2bin("NOOB."), null);
 
-      uint8[] name;
+      uint8[] name = new uint8[60];
       handle.self_get_name (name);
-      stdout.printf("Tox name: %s", bin2hex(name));
+      stdout.printf("Tox name: %s\n", bin2hex(name));
 
       handle.bootstrap (
         "195.154.119.113",
@@ -39,6 +39,10 @@ namespace ToxVapi {
         hex2bin ("E398A69646B8CEACA9F0B84F553726C1C49270558C57DF5F3C368F05A7D71354"),
         null
       );
+
+      uint8[] pubkey = new uint8[Tox.PUBLIC_KEY_SIZE];
+      handle.self_get_public_key (pubkey);
+      stdout.printf("ToxID: %s\n", bin2hex (pubkey));
 
       handle.friend_message (this.handle_message);
       handle.iterate ();
