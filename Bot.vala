@@ -50,14 +50,23 @@ namespace ToxVapi {
       this.handle.self_get_address (toxid);
       stdout.printf("ToxID: %s\n", bin2hex (toxid));
 
-      this.tox_thread = new Thread<int> ("tox-bg-thread", this.tox_bg_thread);
-      int result = this.tox_thread.join ();
-
-      /*try { this.handle.on_friend_message.connect (this.handle_message); }
-      catch (Error e) { stdout.printf("Error: %s", e.message); }*/
+      this.handle.friend_message (this.handle_message);
+      this.launch_thread ();
     }
+
+    public delegate void FriendMessageFunc (
+        uint32 friend_number,
+        MessageType type,
+        uint8[] message
+    );
+
     public void handle_message (uint32 friend_number, MessageType type, uint8[] message) {
       stdout.printf ("%u: %s".printf (friend_number, bin2hex(message)));
+    }
+
+    public void launch_thread () {
+      this.tox_thread = new Thread<int> ("tox-bg-thread", this.tox_bg_thread);
+      int result = this.tox_thread.join ();
     }
     public int tox_bg_thread () {
       this.is_running = true;

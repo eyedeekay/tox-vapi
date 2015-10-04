@@ -1042,6 +1042,29 @@ namespace Tox {
     [CCode (cname = "tox_file_recv_chunk_cb")]
     public signal void on_file_recv_chunk (uint32 friend_number, uint32 file_number, uint64 position, uint8[] data);
 
+    // TODO: DELEGATES TEST.
+    /**
+     * @param friend_number The friend number of the friend who sent the message.
+     * @param time_delta Time between composition and sending.
+     * @param message The message data they sent.
+     * @param length The size of the message byte array.
+     *
+     * @see friend_request for more information on time_delta.
+     */
+    [CCode (cname="tox_friend_message_cb", has_target=false, has_type_id=false)]
+    public delegate void FriendMessageFunc (
+        uint32 friend_number,
+        MessageType type,
+        uint8[] message
+    );
+
+    /**
+     * Set the callback for the `friend_message` event. Pass NULL to unset.
+     *
+     * This event is triggered when a message from a friend is received.
+     */
+    [CCode (cname="tox_callback_friend_message")]
+    public void friend_message (FriendMessageFunc callback);
 
     // Methods.
     [CCode (cname="tox_new")]
