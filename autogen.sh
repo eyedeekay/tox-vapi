@@ -1,9 +1,16 @@
 #!/bin/sh
 binary_path = "Bot"
 
-if [ -f "$binary_path" ]
+if [ -f "./Bot" ]
 then
-  rm "$binary_path"
+  rm "./Bot"
+fi
+
+if [ "$1" = "--format" ]
+then
+  echo "-- Formating the code."
+  make
+  rm *.orig
 fi
 
 valac \
@@ -14,10 +21,10 @@ Bot.vala \
 -o Bot \
 --verbose --debug \
 
-if [ -f "$binary_path" ]
+if [ -f "./Bot" ]
 then
   echo "-- Building app successfully done."
-  chmod +x "$binary_path"
+  chmod +x Bot
   ./Bot
 else
   echo "-- Building app failed."

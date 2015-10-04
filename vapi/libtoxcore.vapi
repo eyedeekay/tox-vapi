@@ -171,22 +171,22 @@ namespace Tox {
    */
   [CCode (cname="TOX_USER_STATUS", cprefix="TOX_USER_STATUS_", has_type_id=false)]
   public enum UserStatus {
-      /**
-      * User is online and available.
-      */
-      NONE,
+    /**
+    * User is online and available.
+    */
+    NONE,
 
-      /**
-      * User is away. Clients can set this e.g. after a user defined
-      * inactivity time.
-      */
-      AWAY,
+    /**
+    * User is away. Clients can set this e.g. after a user defined
+    * inactivity time.
+    */
+    AWAY,
 
-      /**
-      * User is busy. Signals to other clients that this client does not
-      * currently wish to communicate.
-      */
-      BUSY
+    /**
+    * User is busy. Signals to other clients that this client does not
+    * currently wish to communicate.
+    */
+    BUSY
   }
 
   /**
@@ -194,63 +194,63 @@ namespace Tox {
    */
   [CCode (cname="TOX_CONNECTION", cprefix="TOX_CONNECTION_", has_type_id=false)]
   public enum ConnectionStatus {
-      /**
-       * There is no connection. This instance, or the friend the state change is
-       * about, is now offline.
-       */
-      NONE,
+    /**
+     * There is no connection. This instance, or the friend the state change is
+     * about, is now offline.
+     */
+    NONE,
 
-      /**
-       * A TCP connection has been established. For the own instance, this means it
-       * is connected through a TCP relay, only. For a friend, this means that the
-       * connection to that particular friend goes through a TCP relay.
-       */
-      TCP,
+    /**
+     * A TCP connection has been established. For the own instance, this means it
+     * is connected through a TCP relay, only. For a friend, this means that the
+     * connection to that particular friend goes through a TCP relay.
+     */
+    TCP,
 
-      /**
-       * A UDP connection has been established. For the own instance, this means it
-       * is able to send UDP packets to DHT nodes, but may still be connected to
-       * a TCP relay. For a friend, this means that the connection to that
-       * particular friend was built using direct UDP packets.
-       */
-      UDP
+    /**
+     * A UDP connection has been established. For the own instance, this means it
+     * is able to send UDP packets to DHT nodes, but may still be connected to
+     * a TCP relay. For a friend, this means that the connection to that
+     * particular friend was built using direct UDP packets.
+     */
+    UDP
   }
 
   [CCode (cname="TOX_FILE_CONTROL", cprefix="TOX_FILE_CONTROL_", has_type_id=false)]
   public enum FileControlStatus {
-      RESUME,
-      PAUSE,
-      CANCEL,
+    RESUME,
+    PAUSE,
+    CANCEL,
   }
   [CCode (cname="TOX_FILE_KIND", cprefix="TOX_FILE_KIND_", has_type_id=false)]
   public enum FileKind {
-      /**
-       * Arbitrary file data. Clients can choose to handle it based on the file name
-       * or magic or any other way they choose.
-       */
-      DATA,
+    /**
+     * Arbitrary file data. Clients can choose to handle it based on the file name
+     * or magic or any other way they choose.
+     */
+    DATA,
 
-      /**
-       * Avatar file_id. This consists of tox_hash(image).
-       * Avatar data. This consists of the image data.
-       *
-       * Avatars can be sent at any time the client wishes. Generally, a client will
-       * send the avatar to a friend when that friend comes online, and to all
-       * friends when the avatar changed. A client can save some traffic by
-       * remembering which friend received the updated avatar already and only send
-       * it if the friend has an out of date avatar.
-       *
-       * Clients who receive avatar send requests can reject it (by sending
-       * TOX_FILE_CONTROL_CANCEL before any other controls), or accept it (by
-       * sending TOX_FILE_CONTROL_RESUME). The file_id of length TOX_HASH_LENGTH bytes
-       * (same length as TOX_FILE_ID_LENGTH) will contain the hash. A client can compare
-       * this hash with a saved hash and send TOX_FILE_CONTROL_CANCEL to terminate the avatar
-       * transfer if it matches.
-       *
-       * When file_size is set to 0 in the transfer request it means that the client
-       * has no avatar.
-       */
-      AVATAR
+    /**
+     * Avatar file_id. This consists of tox_hash(image).
+     * Avatar data. This consists of the image data.
+     *
+     * Avatars can be sent at any time the client wishes. Generally, a client will
+     * send the avatar to a friend when that friend comes online, and to all
+     * friends when the avatar changed. A client can save some traffic by
+     * remembering which friend received the updated avatar already and only send
+     * it if the friend has an out of date avatar.
+     *
+     * Clients who receive avatar send requests can reject it (by sending
+     * TOX_FILE_CONTROL_CANCEL before any other controls), or accept it (by
+     * sending TOX_FILE_CONTROL_RESUME). The file_id of length TOX_HASH_LENGTH bytes
+     * (same length as TOX_FILE_ID_LENGTH) will contain the hash. A client can compare
+     * this hash with a saved hash and send TOX_FILE_CONTROL_CANCEL to terminate the avatar
+     * transfer if it matches.
+     *
+     * When file_size is set to 0 in the transfer request it means that the client
+     * has no avatar.
+     */
+    AVATAR
   }
 
   /**
@@ -259,16 +259,16 @@ namespace Tox {
    */
   [CCode (cname="TOX_MESSAGE_TYPE", cprefix="TOX_MESSAGE_TYPE_", has_type_id=false)]
   public enum MessageType {
-      /**
-      * Normal text message. Similar to PRIVMSG on IRC.
-      */
-      NORMAL,
+    /**
+    * Normal text message. Similar to PRIVMSG on IRC.
+    */
+    NORMAL,
 
-      /**
-      * A message describing an user action. This is similar to /me (CTCP ACTION)
-      * on IRC.
-      */
-      ACTION
+    /**
+    * A message describing an user action. This is similar to /me (CTCP ACTION)
+    * on IRC.
+    */
+    ACTION
   }
 
   /*******************************************************************************
@@ -282,20 +282,20 @@ namespace Tox {
   */
   [CCode (cname="TOX_PROXY_TYPE", cprefix="TOX_PROXY_TYPE_", has_type_id=false)]
   public enum ProxyType {
-      /**
-      * Don't use a proxy.
-      */
-      NONE,
+    /**
+    * Don't use a proxy.
+    */
+    NONE,
 
-      /**
-      * HTTP proxy using CONNECT.
-      */
-      HTTP,
+    /**
+    * HTTP proxy using CONNECT.
+    */
+    HTTP,
 
-      /**
-      * SOCKS proxy for simple socket pipes.
-      */
-      SOCKS5
+    /**
+    * SOCKS proxy for simple socket pipes.
+    */
+    SOCKS5
   }
 
   /**
@@ -303,20 +303,20 @@ namespace Tox {
    */
   [CCode (cname="TOX_SAVEDATA_TYPE", cprefix="TOX_SAVEDATA_TYPE_", has_type_id=false)]
   public enum SaveDataType {
-      /**
-      * No savedata.
-      */
-      NONE,
+    /**
+    * No savedata.
+    */
+    NONE,
 
-      /**
-      * Savedata is one that was obtained from tox_get_savedata
-      */
-      TOX_SAVE,
+    /**
+    * Savedata is one that was obtained from tox_get_savedata
+    */
+    TOX_SAVE,
 
-      /**
-      * Savedata is a secret key of length TOX_SECRET_KEY_SIZE
-      */
-      SECRET_KEY
+    /**
+    * Savedata is a secret key of length TOX_SECRET_KEY_SIZE
+    */
+    SECRET_KEY
   }
 
   /*******************************************************************************
@@ -327,595 +327,595 @@ namespace Tox {
 
   [CCode (cname="TOX_ERR_NEW", cprefix = "TOX_ERR_NEW_")]
   public enum TOX_ERR_NEW {
-      /**
-       * The function returned successfully.
-       */
-      OK,
+    /**
+     * The function returned successfully.
+     */
+    OK,
 
-      /**
-       * One of the arguments to the function was NULL when it was not expected.
-       */
-      NULL,
+    /**
+     * One of the arguments to the function was NULL when it was not expected.
+     */
+    NULL,
 
-      /**
-       * The function was unable to allocate enough memory to store the internal
-       * structures for the Tox object.
-       */
-      MALLOC,
+    /**
+     * The function was unable to allocate enough memory to store the internal
+     * structures for the Tox object.
+     */
+    MALLOC,
 
-      /**
-       * The function was unable to bind to a port. This may mean that all ports
-       * have already been bound, e.g. by other Tox instances, or it may mean
-       * a permission error. You may be able to gather more information from errno.
-       */
-      PORT_ALLOC,
+    /**
+     * The function was unable to bind to a port. This may mean that all ports
+     * have already been bound, e.g. by other Tox instances, or it may mean
+     * a permission error. You may be able to gather more information from errno.
+     */
+    PORT_ALLOC,
 
-      /**
-       * proxy_type was invalid.
-       */
-      PROXY_BAD_TYPE,
+    /**
+     * proxy_type was invalid.
+     */
+    PROXY_BAD_TYPE,
 
-      /**
-       * proxy_type was valid but the proxy_host passed had an invalid format
-       * or was NULL.
-       */
-      PROXY_BAD_HOST,
+    /**
+     * proxy_type was valid but the proxy_host passed had an invalid format
+     * or was NULL.
+     */
+    PROXY_BAD_HOST,
 
-      /**
-       * proxy_type was valid, but the proxy_port was invalid.
-       */
-      PROXY_BAD_PORT,
+    /**
+     * proxy_type was valid, but the proxy_port was invalid.
+     */
+    PROXY_BAD_PORT,
 
-      /**
-       * The proxy address passed could not be resolved.
-       */
-      PROXY_NOT_FOUND,
+    /**
+     * The proxy address passed could not be resolved.
+     */
+    PROXY_NOT_FOUND,
 
-      /**
-       * The byte array to be loaded contained an encrypted save.
-       */
-      LOAD_ENCRYPTED,
+    /**
+     * The byte array to be loaded contained an encrypted save.
+     */
+    LOAD_ENCRYPTED,
 
-      /**
-       * The data format was invalid. This can happen when loading data that was
-       * saved by an older version of Tox, or when the data has been corrupted.
-       * When loading from badly formatted data, some data may have been loaded,
-       * and the rest is discarded. Passing an invalid length parameter also
-       * causes this error.
-       */
-      LOAD_BAD_FORMAT,
+    /**
+     * The data format was invalid. This can happen when loading data that was
+     * saved by an older version of Tox, or when the data has been corrupted.
+     * When loading from badly formatted data, some data may have been loaded,
+     * and the rest is discarded. Passing an invalid length parameter also
+     * causes this error.
+     */
+    LOAD_BAD_FORMAT,
   }
 
   [CCode (cname="TOX_ERR_OPTIONS_NEW", cprefix="TOX_ERR_OPTIONS_NEW_")]
   public enum TOX_ERR_OPTIONS_NEW {
-      /**
-      * The function returned successfully.
-      */
-      OK,
+    /**
+    * The function returned successfully.
+    */
+    OK,
 
-      /**
-       * One of the arguments to the function was NULL when it was not expected.
-       */
-      NULL,
+    /**
+     * One of the arguments to the function was NULL when it was not expected.
+     */
+    NULL,
 
-      /**
-       * The function was unable to allocate enough memory to store the internal
-       * structures for the Tox object.
-       */
-      MALLOC,
+    /**
+     * The function was unable to allocate enough memory to store the internal
+     * structures for the Tox object.
+     */
+    MALLOC,
 
-      /**
-       * The function was unable to bind to a port. This may mean that all ports
-       * have already been bound, e.g. by other Tox instances, or it may mean
-       * a permission error. You may be able to gather more information from errno.
-       */
-      PORT_ALLOC,
+    /**
+     * The function was unable to bind to a port. This may mean that all ports
+     * have already been bound, e.g. by other Tox instances, or it may mean
+     * a permission error. You may be able to gather more information from errno.
+     */
+    PORT_ALLOC,
 
-      /**
-       * proxy_type was invalid.
-       */
-      PROXY_BAD_TYPE,
+    /**
+     * proxy_type was invalid.
+     */
+    PROXY_BAD_TYPE,
 
-      /**
-       * proxy_type was valid but the proxy_host passed had an invalid format
-       * or was NULL.
-       */
-      PROXY_BAD_HOST,
+    /**
+     * proxy_type was valid but the proxy_host passed had an invalid format
+     * or was NULL.
+     */
+    PROXY_BAD_HOST,
 
-      /**
-       * proxy_type was valid, but the proxy_port was invalid.
-       */
-      PROXY_BAD_PORT,
+    /**
+     * proxy_type was valid, but the proxy_port was invalid.
+     */
+    PROXY_BAD_PORT,
 
-      /**
-       * The proxy address passed could not be resolved.
-       */
-      PROXY_NOT_FOUND,
+    /**
+     * The proxy address passed could not be resolved.
+     */
+    PROXY_NOT_FOUND,
 
-      /**
-       * The byte array to be loaded contained an encrypted save.
-       */
-      LOAD_ENCRYPTED,
+    /**
+     * The byte array to be loaded contained an encrypted save.
+     */
+    LOAD_ENCRYPTED,
 
-      /**
-       * The data format was invalid. This can happen when loading data that was
-       * saved by an older version of Tox, or when the data has been corrupted.
-       * When loading from badly formatted data, some data may have been loaded,
-       * and the rest is discarded. Passing an invalid length parameter also
-       * causes this error.
-       */
-      LOAD_BAD_FORMAT
+    /**
+     * The data format was invalid. This can happen when loading data that was
+     * saved by an older version of Tox, or when the data has been corrupted.
+     * When loading from badly formatted data, some data may have been loaded,
+     * and the rest is discarded. Passing an invalid length parameter also
+     * causes this error.
+     */
+    LOAD_BAD_FORMAT
   }
 
   [CCode (cname="TOX_ERR_BOOTSTRAP", cprefix="TOX_ERR_BOOTSTRAP_")]
   public enum TOX_ERR_BOOTSTRAP {
-      /**
-      * The function returned successfully.
-      */
-      OK,
+    /**
+    * The function returned successfully.
+    */
+    OK,
 
-      /**
-       * One of the arguments to the function was NULL when it was not expected.
-       */
-      NULL,
+    /**
+     * One of the arguments to the function was NULL when it was not expected.
+     */
+    NULL,
 
-      /**
-       * The address could not be resolved to an IP address, or the IP address
-       * passed was invalid.
-       */
-      BAD_HOST,
+    /**
+     * The address could not be resolved to an IP address, or the IP address
+     * passed was invalid.
+     */
+    BAD_HOST,
 
-      /**
-       * The port passed was invalid. The valid port range is (1, 65535).
-       */
-      BAD_PORT
+    /**
+     * The port passed was invalid. The valid port range is (1, 65535).
+     */
+    BAD_PORT
   }
 
   [CCode (cname="TOX_ERR_SET_INFO", cprefix="TOX_ERR_SET_INFO_")]
   public enum TOX_ERR_SET_INFO {
-      /**
-      * The function returned successfully.
-      */
-      OK,
+    /**
+    * The function returned successfully.
+    */
+    OK,
 
-      /**
-       * One of the arguments to the function was NULL when it was not expected.
-       */
-      NULL,
+    /**
+     * One of the arguments to the function was NULL when it was not expected.
+     */
+    NULL,
 
-      /**
-       * Information length exceeded maximum permissible size.
-       */
-      TOO_LONG
+    /**
+     * Information length exceeded maximum permissible size.
+     */
+    TOO_LONG
   }
 
   [CCode (cname="TOX_ERR_FRIEND_ADD", cprefix="TOX_ERR_FRIEND_ADD_")]
   public enum TOX_ERR_FRIEND_ADD {
-      /**
-      * The function returned successfully.
-      */
-      OK,
+    /**
+    * The function returned successfully.
+    */
+    OK,
 
-      /**
-       * One of the arguments to the function was NULL when it was not expected.
-       */
-      NULL,
+    /**
+     * One of the arguments to the function was NULL when it was not expected.
+     */
+    NULL,
 
-      /**
-       * The length of the friend request message exceeded
-       * TOX_MAX_FRIEND_REQUEST_LENGTH.
-       */
-      TOO_LONG,
+    /**
+     * The length of the friend request message exceeded
+     * TOX_MAX_FRIEND_REQUEST_LENGTH.
+     */
+    TOO_LONG,
 
-      /**
-       * The friend request message was empty. This, and the TOO_LONG code will
-       * never be returned from tox_friend_add_norequest.
-       */
-      NO_MESSAGE,
+    /**
+     * The friend request message was empty. This, and the TOO_LONG code will
+     * never be returned from tox_friend_add_norequest.
+     */
+    NO_MESSAGE,
 
-      /**
-       * The friend address belongs to the sending client.
-       */
-      OWN_KEY,
+    /**
+     * The friend address belongs to the sending client.
+     */
+    OWN_KEY,
 
-      /**
-       * A friend request has already been sent, or the address belongs to a friend
-       * that is already on the friend list.
-       */
-      ALREADY_SENT,
+    /**
+     * A friend request has already been sent, or the address belongs to a friend
+     * that is already on the friend list.
+     */
+    ALREADY_SENT,
 
-      /**
-       * The friend address checksum failed.
-       */
-      BAD_CHECKSUM,
+    /**
+     * The friend address checksum failed.
+     */
+    BAD_CHECKSUM,
 
-      /**
-       * The friend was already there, but the nospam value was different.
-       */
-      SET_NEW_NOSPAM,
+    /**
+     * The friend was already there, but the nospam value was different.
+     */
+    SET_NEW_NOSPAM,
 
-      /**
-       * A memory allocation failed when trying to increase the friend list size.
-       */
-      MALLOC
+    /**
+     * A memory allocation failed when trying to increase the friend list size.
+     */
+    MALLOC
   }
 
   [CCode (cname="TOX_ERR_FRIEND_DELETE", cprefix="TOX_ERR_FRIEND_DELETE_")]
   public enum TOX_ERR_FRIEND_DELETE {
-      /**
-      * The function returned successfully.
-      */
-      OK,
+    /**
+    * The function returned successfully.
+    */
+    OK,
 
-      /**
-       * There was no friend with the given friend number. No friends were deleted.
-       */
-      FRIEND_NOT_FOUND
+    /**
+     * There was no friend with the given friend number. No friends were deleted.
+     */
+    FRIEND_NOT_FOUND
   }
 
   [CCode (cname="TOX_ERR_FRIEND_BY_PUBLIC_KEY", cprefix="TOX_ERR_FRIEND_BY_PUBLIC_KEY_")]
   public enum TOX_ERR_FRIEND_BY_PUBLIC_KEY {
-      /**
-      * The function returned successfully.
-      */
-      OK,
+    /**
+    * The function returned successfully.
+    */
+    OK,
 
-      /**
-       * One of the arguments to the function was NULL when it was not expected.
-       */
-      NULL,
+    /**
+     * One of the arguments to the function was NULL when it was not expected.
+     */
+    NULL,
 
-      /**
-       * No friend with the given Public Key exists on the friend list.
-       */
-      NOT_FOUND
+    /**
+     * No friend with the given Public Key exists on the friend list.
+     */
+    NOT_FOUND
   }
 
   [CCode (cname="TOX_ERR_FRIEND_GET_PUBLIC_KEY", cprefix="TOX_ERR_FRIEND_GET_PUBLIC_KEY_")]
   public enum TOX_ERR_FRIEND_GET_PUBLIC_KEY {
-      /**
-      * The function returned successfully.
-      */
-      OK,
+    /**
+    * The function returned successfully.
+    */
+    OK,
 
-      /**
-       * No friend with the given number exists on the friend list.
-       */
-      FRIEND_NOT_FOUND
+    /**
+     * No friend with the given number exists on the friend list.
+     */
+    FRIEND_NOT_FOUND
   }
 
   [CCode (cname="TOX_ERR_FRIEND_GET_LAST_ONLINE", cprefix="TOX_ERR_FRIEND_GET_LAST_ONLINE_")]
   public enum TOX_ERR_FRIEND_GET_LAST_ONLINE {
-      /**
-      * The function returned successfully.
-      */
-      OK,
+    /**
+    * The function returned successfully.
+    */
+    OK,
 
-      /**
-       * No friend with the given number exists on the friend list.
-       */
-      FRIEND_NOT_FOUND
+    /**
+     * No friend with the given number exists on the friend list.
+     */
+    FRIEND_NOT_FOUND
   }
 
   [CCode (cname="TOX_ERR_FRIEND_QUERY", cprefix="TOX_ERR_FRIEND_QUERY_")]
   public enum TOX_ERR_FRIEND_QUERY {
-      /**
-      * The function returned successfully.
-      */
-      OK,
+    /**
+    * The function returned successfully.
+    */
+    OK,
 
-      /**
-       * The pointer parameter for storing the query result (name, message) was
-       * NULL. Unlike the `_self_` variants of these functions, which have no effect
-       * when a parameter is NULL, these functions return an error in that case.
-       */
-      NULL,
+    /**
+     * The pointer parameter for storing the query result (name, message) was
+     * NULL. Unlike the `_self_` variants of these functions, which have no effect
+     * when a parameter is NULL, these functions return an error in that case.
+     */
+    NULL,
 
-      /**
-       * The friend_number did not designate a valid friend.
-       */
-      FRIEND_NOT_FOUND,
+    /**
+     * The friend_number did not designate a valid friend.
+     */
+    FRIEND_NOT_FOUND,
 
-      NOT_FOUND
+    NOT_FOUND
   }
 
   [CCode (cname="TOX_ERR_SET_TYPING", cprefix="TOX_ERR_SET_TYPING_")]
   public enum TOX_ERR_SET_TYPING {
-      /**
-      * The function returned successfully.
-      */
-      OK,
+    /**
+    * The function returned successfully.
+    */
+    OK,
 
-      /**
-       * The friend number did not designate a valid friend.
-       */
-      FRIEND_NOT_FOUND
+    /**
+     * The friend number did not designate a valid friend.
+     */
+    FRIEND_NOT_FOUND
   }
 
   [CCode (cname="TOX_ERR_FRIEND_SEND_MESSAGE", cprefix="TOX_ERR_FRIEND_SEND_MESSAGE_")]
   public enum TOX_ERR_FRIEND_SEND_MESSAGE {
-      /**
-      * The function returned successfully.
-      */
-      OK,
+    /**
+    * The function returned successfully.
+    */
+    OK,
 
-      /**
-       * One of the arguments to the function was NULL when it was not expected.
-       */
-      NULL,
+    /**
+     * One of the arguments to the function was NULL when it was not expected.
+     */
+    NULL,
 
-      /**
-       * The friend number did not designate a valid friend.
-       */
-      FRIEND_NOT_FOUND,
+    /**
+     * The friend number did not designate a valid friend.
+     */
+    FRIEND_NOT_FOUND,
 
-      /**
-       * This client is currently not connected to the friend.
-       */
-      FRIEND_NOT_CONNECTED,
+    /**
+     * This client is currently not connected to the friend.
+     */
+    FRIEND_NOT_CONNECTED,
 
-      /**
-       * An allocation error occurred while increasing the send queue size.
-       */
-      SENDQ,
+    /**
+     * An allocation error occurred while increasing the send queue size.
+     */
+    SENDQ,
 
-      /**
-       * Message length exceeded TOX_MAX_MESSAGE_LENGTH.
-       */
-      TOO_LONG,
+    /**
+     * Message length exceeded TOX_MAX_MESSAGE_LENGTH.
+     */
+    TOO_LONG,
 
-      /**
-       * Attempted to send a zero-length message.
-       */
-      EMPTY
+    /**
+     * Attempted to send a zero-length message.
+     */
+    EMPTY
   }
 
   [CCode (cname="TOX_ERR_FILE_CONTROL", cprefix="TOX_ERR_FILE_CONTROL_")]
   public enum TOX_ERR_FILE_CONTROL {
-      /**
-      * The function returned successfully.
-      */
-      OK,
+    /**
+    * The function returned successfully.
+    */
+    OK,
 
-      /**
-       * The friend_number passed did not designate a valid friend.
-       */
-      FRIEND_NOT_FOUND,
+    /**
+     * The friend_number passed did not designate a valid friend.
+     */
+    FRIEND_NOT_FOUND,
 
-      /**
-       * This client is currently not connected to the friend.
-       */
-      FRIEND_NOT_CONNECTED,
+    /**
+     * This client is currently not connected to the friend.
+     */
+    FRIEND_NOT_CONNECTED,
 
-      /**
-       * No file transfer with the given file number was found for the given friend.
-       */
-      NOT_FOUND,
+    /**
+     * No file transfer with the given file number was found for the given friend.
+     */
+    NOT_FOUND,
 
-      /**
-       * A RESUME control was sent, but the file transfer is running normally.
-       */
-      NOT_PAUSED,
+    /**
+     * A RESUME control was sent, but the file transfer is running normally.
+     */
+    NOT_PAUSED,
 
-      /**
-       * A RESUME control was sent, but the file transfer was paused by the other
-       * party. Only the party that paused the transfer can resume it.
-       */
-      DENIED,
+    /**
+     * A RESUME control was sent, but the file transfer was paused by the other
+     * party. Only the party that paused the transfer can resume it.
+     */
+    DENIED,
 
-      /**
-       * A PAUSE control was sent, but the file transfer was already paused.
-       */
-      ALREADY_PAUSED,
+    /**
+     * A PAUSE control was sent, but the file transfer was already paused.
+     */
+    ALREADY_PAUSED,
 
-      /**
-       * Packet queue is full.
-       */
-      SENDQ
+    /**
+     * Packet queue is full.
+     */
+    SENDQ
   }
 
   [CCode (cname="TOX_ERR_FILE_SEEK", cprefix="TOX_ERR_FILE_SEEK_")]
   public enum TOX_ERR_FILE_SEEK {
-      /**
-      * The function returned successfully.
-      */
-      OK,
+    /**
+    * The function returned successfully.
+    */
+    OK,
 
-      /**
-       * The friend_number passed did not designate a valid friend.
-       */
-      FRIEND_NOT_FOUND,
+    /**
+     * The friend_number passed did not designate a valid friend.
+     */
+    FRIEND_NOT_FOUND,
 
-      /**
-       * This client is currently not connected to the friend.
-       */
-      FRIEND_NOT_CONNECTED,
+    /**
+     * This client is currently not connected to the friend.
+     */
+    FRIEND_NOT_CONNECTED,
 
-      /**
-       * No file transfer with the given file number was found for the given friend.
-       */
-      NOT_FOUND,
+    /**
+     * No file transfer with the given file number was found for the given friend.
+     */
+    NOT_FOUND,
 
-      /**
-       * File was not in a state where it could be seeked.
-       */
-      DENIED,
+    /**
+     * File was not in a state where it could be seeked.
+     */
+    DENIED,
 
-      /**
-       * Seek position was invalid
-       */
-      INVALID_POSITION,
+    /**
+     * Seek position was invalid
+     */
+    INVALID_POSITION,
 
-      /**
-       * Packet queue is full.
-       */
-      SENDQ
+    /**
+     * Packet queue is full.
+     */
+    SENDQ
   }
 
   [CCode (cname="TOX_ERR_FILE_GET", cprefix="TOX_ERR_FILE_GET_")]
   public enum TOX_ERR_FILE_GET {
-      /**
-      * The function returned successfully.
-      */
-      OK,
+    /**
+    * The function returned successfully.
+    */
+    OK,
 
-      /**
-       * One of the arguments to the function was NULL when it was not expected.
-       */
-      NULL,
+    /**
+     * One of the arguments to the function was NULL when it was not expected.
+     */
+    NULL,
 
-      /**
-       * The friend_number passed did not designate a valid friend.
-       */
-      FRIEND_NOT_FOUND,
+    /**
+     * The friend_number passed did not designate a valid friend.
+     */
+    FRIEND_NOT_FOUND,
 
-      /**
-       * No file transfer with the given file number was found for the given friend.
-       */
-      NOT_FOUND
+    /**
+     * No file transfer with the given file number was found for the given friend.
+     */
+    NOT_FOUND
   }
 
   [CCode (cname="TOX_ERR_FILE_SEND", cprefix="TOX_ERR_FILE_SEND_")]
   public enum TOX_ERR_FILE_SEND {
-      /**
-      * The function returned successfully.
-      */
-      OK,
+    /**
+    * The function returned successfully.
+    */
+    OK,
 
-      /**
-       * One of the arguments to the function was NULL when it was not expected.
-       */
-      NULL,
+    /**
+     * One of the arguments to the function was NULL when it was not expected.
+     */
+    NULL,
 
-      /**
-       * The friend_number passed did not designate a valid friend.
-       */
-      FRIEND_NOT_FOUND,
+    /**
+     * The friend_number passed did not designate a valid friend.
+     */
+    FRIEND_NOT_FOUND,
 
-      /**
-       * This client is currently not connected to the friend.
-       */
-      FRIEND_NOT_CONNECTED,
+    /**
+     * This client is currently not connected to the friend.
+     */
+    FRIEND_NOT_CONNECTED,
 
-      /**
-       * Filename length exceeded TOX_MAX_FILENAME_LENGTH bytes.
-       */
-      NAME_TOO_LONG,
+    /**
+     * Filename length exceeded TOX_MAX_FILENAME_LENGTH bytes.
+     */
+    NAME_TOO_LONG,
 
-      /**
-       * Too many ongoing transfers. The maximum number of concurrent file transfers
-       * is 256 per friend per direction (sending and receiving).
-       */
-      TOO_MANY
+    /**
+     * Too many ongoing transfers. The maximum number of concurrent file transfers
+     * is 256 per friend per direction (sending and receiving).
+     */
+    TOO_MANY
   }
 
   [CCode (cname="TOX_ERR_FILE_SEND_CHUNK", cprefix="TOX_ERR_FILE_SEND_CHUNK_")]
   public enum TOX_ERR_FILE_SEND_CHUNK {
-      /**
-      * The function returned successfully.
-      */
-      OK,
+    /**
+    * The function returned successfully.
+    */
+    OK,
 
-      /**
-       * The length parameter was non-zero, but data was NULL.
-       */
-      NULL,
+    /**
+     * The length parameter was non-zero, but data was NULL.
+     */
+    NULL,
 
-      /**
-       * The friend_number passed did not designate a valid friend.
-       */
-      FRIEND_NOT_FOUND,
+    /**
+     * The friend_number passed did not designate a valid friend.
+     */
+    FRIEND_NOT_FOUND,
 
-      /**
-       * This client is currently not connected to the friend.
-       */
-      FRIEND_NOT_CONNECTED,
+    /**
+     * This client is currently not connected to the friend.
+     */
+    FRIEND_NOT_CONNECTED,
 
-      /**
-       * No file transfer with the given file number was found for the given friend.
-       */
-      NOT_FOUND,
+    /**
+     * No file transfer with the given file number was found for the given friend.
+     */
+    NOT_FOUND,
 
 
-      /**
-       * File transfer was found but isn't in a transferring state: (paused, done,
-       * broken, etc...) (happens only when not called from the request chunk callback).
-       */
-      NOT_TRANSFERRING,
+    /**
+     * File transfer was found but isn't in a transferring state: (paused, done,
+     * broken, etc...) (happens only when not called from the request chunk callback).
+     */
+    NOT_TRANSFERRING,
 
-      /**
-       * Attempted to send more or less data than requested. The requested data size is
-       * adjusted according to maximum transmission unit and the expected end of
-       * the file. Trying to send less or more than requested will return this error.
-       */
-      INVALID_LENGTH,
+    /**
+     * Attempted to send more or less data than requested. The requested data size is
+     * adjusted according to maximum transmission unit and the expected end of
+     * the file. Trying to send less or more than requested will return this error.
+     */
+    INVALID_LENGTH,
 
-      /**
-       * Packet queue is full.
-       */
-      SENDQ,
+    /**
+     * Packet queue is full.
+     */
+    SENDQ,
 
-      /**
-       * Position parameter was wrong.
-       */
-      WRONG_POSITION
+    /**
+     * Position parameter was wrong.
+     */
+    WRONG_POSITION
   }
 
   [CCode (cname="TOX_ERR_FRIEND_CUSTOM_PACKET", cprefix="TOX_ERR_FRIEND_CUSTOM_PACKET_")]
   public enum TOX_ERR_FRIEND_CUSTOM_PACKET {
-      /**
-      * The function returned successfully.
-      */
-      OK,
+    /**
+    * The function returned successfully.
+    */
+    OK,
 
-      /**
-       * One of the arguments to the function was NULL when it was not expected.
-       */
-      NULL,
+    /**
+     * One of the arguments to the function was NULL when it was not expected.
+     */
+    NULL,
 
-      /**
-       * The friend number did not designate a valid friend.
-       */
-      FRIEND_NOT_FOUND,
+    /**
+     * The friend number did not designate a valid friend.
+     */
+    FRIEND_NOT_FOUND,
 
-      /**
-       * This client is currently not connected to the friend.
-       */
-      FRIEND_NOT_CONNECTED,
+    /**
+     * This client is currently not connected to the friend.
+     */
+    FRIEND_NOT_CONNECTED,
 
-      /**
-       * The first byte of data was not in the specified range for the packet type.
-       * This range is 200-254 for lossy, and 160-191 for lossless packets.
-       */
-      INVALID,
+    /**
+     * The first byte of data was not in the specified range for the packet type.
+     * This range is 200-254 for lossy, and 160-191 for lossless packets.
+     */
+    INVALID,
 
-      /**
-       * Attempted to send an empty packet.
-       */
-      EMPTY,
+    /**
+     * Attempted to send an empty packet.
+     */
+    EMPTY,
 
-      /**
-       * Packet data length exceeded TOX_MAX_CUSTOM_PACKET_SIZE.
-       */
-      TOO_LONG,
+    /**
+     * Packet data length exceeded TOX_MAX_CUSTOM_PACKET_SIZE.
+     */
+    TOO_LONG,
 
-      /**
-       * Packet queue is full.
-       */
-      SENDQ
+    /**
+     * Packet queue is full.
+     */
+    SENDQ
   }
 
   [CCode (cname="TOX_ERR_GET_PORT", cprefix="TOX_ERR_GET_PORT_")]
   public enum TOX_ERR_GET_PORT {
-      /**
-      * The function returned successfully.
-      */
-      OK,
+    /**
+    * The function returned successfully.
+    */
+    OK,
 
-      /**
-       * The instance was not bound to any port.
-       */
-      NOT_BOUND
+    /**
+     * The instance was not bound to any port.
+     */
+    NOT_BOUND
   }
 
   /**
