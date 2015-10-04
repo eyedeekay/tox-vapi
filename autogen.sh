@@ -1,6 +1,4 @@
 #!/bin/sh
-binary_path = "Bot"
-
 if [ -f "./Bot" ]
 then
   rm "./Bot"

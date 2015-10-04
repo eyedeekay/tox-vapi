@@ -1016,6 +1016,58 @@ namespace Tox {
   [CCode (cname="Tox", free_function="tox_kill", cprefix="tox_", has_type_id=false)]
   [Compact]
   public class Tox {
+    // Signals.
+    [CCode (cname="tox_friend_name_cb")]
+    public signal on_friend_name (uint32 friend_number, uint8[] name);
+    [CCode (cname="tox_friend_status_message_cb")]
+    public signal on_friend_status_message (uint32 friend_number, uint8[] message);
+    [CCode (cname="tox_friend_status_cb")]
+    public signal on_friend_status (uint32 friend_number, UserStatus status);
+    [CCode (cname="tox_friend_connection_status_cb")]
+    public signal on_friend_connection_status (uint32 friend_number, ConnectionStatus status);
+    [CCode (cname = "tox_friend_typing_cb")]
+    public signal on_friend_typing (uint32 friend_number, bool is_typing);
+    [CCode (cname = "tox_friend_read_receipt_cb")]
+    public signal on_friend_read_receipt (uint32 friend_number, uint32 message_id);
+    [CCode (cname="tox_friend_request_cb")]
+    public signal on_friend_request ([CCode (array_length = false)] uint8 public_key, uint8[] message);
+    //[CCode (cname="tox_friend_message_cb")]
+    //public signal friend_message (uint32 friend_number, MessageType type, uint8[] message);
+    [CCode (cname = "tox_file_recv_control_cb")]
+    public signal on_file_recv_control (uint32 friend_number, uint32 file_number, FileControlStatus status);
+    [CCode (cname = "tox_file_chunk_request_cb")]
+    public signal on_file_chunk_request (uint32 friend_number, uint32 file_number, uint64 position, size_t length);
+    [CCode (cname = "tox_file_recv_cb")]
+    public signal on_file_recv (uint32 friend_number, uint32 file_number, FileKind kind, uint64 file_size, uint8[] filename);
+    [CCode (cname = "tox_file_recv_chunk_cb")]
+    public signal on_file_recv_chunk (uint32 friend_number, uint32 file_number, uint64 position, uint8[] data);
+
+    // Test delegates.
+    /**
+     * @param friend_number The friend number of the friend who sent the message.
+     * @param time_delta Time between composition and sending.
+     * @param message The message data they sent.
+     * @param length The size of the message byte array.
+     *
+     * @see friend_request for more information on time_delta.
+     */
+    [CCode (cname="tox_friend_message_cb")]
+    public delegate void FriendMessageFunc (
+        uint32 friend_number,
+        MessageType type,
+        uint8[] message
+    );
+
+    /**
+     * Set the callback for the `friend_message` event. Pass NULL to unset.
+     *
+     * This event is triggered when a message from a friend is received.
+     */
+    [CCode (cname="tox_callback_friend_message")]
+    public void friend_message_callback (FriendMessageFunc callback);
+
+
+    // Methods.
     [CCode (cname="tox_new")]
     public Tox (Options? options = null, out TOX_ERR_NEW? error = null) {}
 
