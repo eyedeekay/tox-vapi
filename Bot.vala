@@ -8,42 +8,44 @@ namespace ToxVapi {
     private const string GROUP_NAME = "Official ValaTox groupchat - https://github.com/ValaTox/client";
 
     private Tox.Tox handle;
-    private Thread<int> tox_thread;
     private bool is_running = false;
     private bool is_connected = false;
 
-    public Bot () {}
-    public int run () {
-      if (!Thread.supported ()) {
-        stderr.printf ("Threads are not supported, exiting ...\n");
-        return -1;
-      }
-
-      stdout.printf("Starting bot...\n");
-      this.init_tox ();
-
-      return 0;
-    }
-    public void init_tox () {
-      stdout.printf(
+    public Bot () {
+      print (
         "Running Toxcore version %u.%u.%u\n",
         Tox.Version.MAJOR,
         Tox.Version.MINOR,
         Tox.Version.PATCH
       );
-
       this.handle = new Tox.Tox (null, null);
-      // Start the tox thread.
-      this.launch_thread ();
+      bootstrap ();
+      Timeout.add (handle.iteration_interval (), () => {
+        handle.iterate ();
+        return Source.CONTINUE;
+      });
 
       var user_name = this.BOT_NAME.data;
       this.handle.self_set_name (user_name, null);
 
       uint8[] name = new uint8[this.handle.self_get_name_size ()];
       this.handle.self_get_name (name);
-      stdout.printf("Tox name: %s\n", Tools.bin2nullterm (name));
+      print ("Tox name: %s\n", Tools.bin2nullterm (name));
 
-      // Dirty way to bootstrap.
+      uint8[] toxid = new uint8[Tox.ADDRESS_SIZE];
+      this.handle.self_get_address (toxid);
+      print ("ToxID: %s\n", Tools.bin2hex (toxid));
+
+      // Callbacks.
+      this.handle.connection_status_callback (this.on_connection_status);
+      this.handle.friend_message_callback (this.on_friend_message);
+      this.handle.friend_request_callback (this.on_friend_request);
+      this.handle.friend_status_callback (this.on_friend_status);
+
+      new MainLoop ().run ();
+    }
+
+    private void bootstrap () {
       this.handle.bootstrap (
         "195.154.119.113",
         33445,
@@ -68,65 +70,37 @@ namespace ToxVapi {
         Tools.hex2bin ("C4CEB8C7AC607C6B374E2E782B3C00EA3A63B80D4910B8649CCACDD19F260819"),
         null
       );
-
-      uint8[] toxid = new uint8[Tox.ADDRESS_SIZE];
-      this.handle.self_get_address (toxid);
-      stdout.printf("ToxID: %s\n", Tools.bin2hex (toxid));
-
-      // Adding a friend
-      var friend_toxid = Tools.hex2bin ("DFB4958A86122ACF81BB852DBC767DB8A3A7281A8EDBC83121B30C294E295869121B298FEEA2");
-      var message = "Add me plz ?";
-      stdout.printf("Sending a friend request to %s: \"%s\"\n", Tools.bin2hex (friend_toxid), message);
-      this.handle.friend_add (friend_toxid, Tools.hex2bin (message), null);
-
-      // Callbacks.
-      this.handle.connection_status_callback (this.on_connection_status);
-      this.handle.friend_message_callback (this.on_friend_message);
-      this.handle.friend_request_callback (this.on_friend_request);
-      this.handle.friend_status_callback (this.on_friend_status);
-
-      int result = this.tox_thread.join ();
     }
 
-    public void launch_thread () {
-      this.tox_thread = new Thread<int> ("tox-bg-thread", this.tox_bg_thread);
-      //
-    }
-    public int tox_bg_thread () {
-      this.is_running = true;
+    /*
+    // Adding a friend
+    var friend_toxid = Tools.hex2bin ("TOX ID HERE");
+    var message = "Add me plz ?";
+    stdout.printf("Sending a friend request to %s: \"%s\"\n", Tools.bin2hex (friend_toxid), message);
+    this.handle.friend_add (friend_toxid, Tools.hex2bin (message), null);
+    */
 
-      while (this.is_running) {
-        lock (this.handle) {
-          this.handle.iterate ();
-        }
-
-        Thread.usleep (this.handle.iteration_interval () * 1000);
-      }
-
-      return 0;
-    }
-
-    public void on_connection_status (Tox.ConnectionStatus status) {
+    public void on_connection_status (Tox.Tox handle, Tox.ConnectionStatus status) {
       if (status != Tox.ConnectionStatus.NONE) {
-        stdout.printf("Connected to Tox...");
+        print ("Connected to Tox\n");
       } else {
-        stdout.printf("Disconnected of Tox...");
+        print ("Disconnected\n");
       }
     }
 
-    public void on_friend_message (uint32 friend_number, Tox.MessageType type, uint8[] message) {
+    public void on_friend_message (Tox.Tox handle, uint32 friend_number, Tox.MessageType type, uint8[] message) {
       string message_string = (string) message;
       uint8[] result = new uint8[Tox.MAX_NAME_LENGTH];
-      this.handle.friend_get_name (friend_number, result, null);
-      stdout.printf ("%s: %s", (string) result, message_string);
+      handle.friend_get_name (friend_number, result, null);
+      print ("%s: %s\n", (string) result, message_string);
     }
 
-    public void on_friend_request (uint8[] public_key, uint8[] message) {
-      stdout.printf("Received a friend request from %s.", (string) public_key);
-      this.handle.friend_add_norequest (public_key, null);
+    public void on_friend_request (Tox.Tox handle, uint8[] public_key, uint8[] message) {
+      print ("Received a friend request from %s.\n", (string) public_key);
+      handle.friend_add_norequest (public_key, null);
     }
 
-    public void on_friend_status (uint32 friend_number, UserStatus status) {
+    public void on_friend_status (Tox.Tox handle, uint32 friend_number, UserStatus status) {
       uint8[] result = new uint8[Tox.MAX_NAME_LENGTH];
       var name = this.handle.friend_get_name (friend_number, result, null);
       string _status = "Offline";
@@ -146,7 +120,7 @@ namespace ToxVapi {
         break;
       }
 
-      stdout.printf("%s is now %s", Tools.bin2nullterm (result), _status);
+      print ("%s is now %s\n", Tools.bin2nullterm (result), _status);
     }
   }
 
@@ -160,7 +134,8 @@ namespace ToxVapi {
       }
       return buf;
     }
-    public static string bin2hex (uint8[] bin) requires (bin.length != 0)
+    public static string bin2hex (uint8[] bin)
+    requires (bin.length != 0)
     {
       StringBuilder b = new StringBuilder ();
       for (int i = 0; i < bin.length; ++i) {
@@ -198,9 +173,6 @@ namespace ToxVapi {
   }
 }
 
-public static int main(string [] argv) {
-  var bot = new ToxVapi.Bot ();
-  bot.run ();
-
-  return 0;
+void main() {
+  new ToxVapi.Bot ();
 }
