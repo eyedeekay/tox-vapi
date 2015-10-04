@@ -40,7 +40,7 @@ namespace ToxVapi {
         null
       );
 
-      handle.friend_message_callback (this.handle_message);
+      handle.friend_message (this.handle_message);
       handle.iterate ();
     }
 
