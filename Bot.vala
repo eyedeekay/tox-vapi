@@ -26,13 +26,16 @@ namespace ToxVapi {
       this.options = Tox.Options () {
         ipv6_enabled = true,
         udp_enabled = true,
-        proxy_type = ProxyType.NONE,
-        savedata_type = SaveDataType.TOX_SAVE
+        proxy_type = ProxyType.NONE
       };
 
       // Load/Create the Tox_save.
+      var save = Tools.load_tox_save (this.TOX_SAVE);
       lock (this.options) {
-          this.options.savedata_data = Tools.load_tox_save (this.TOX_SAVE);
+        if (save.length != 0) {
+          this.options.savedata_type = SaveDataType.TOX_SAVE;
+          this.options.savedata_data = save;
+        }
       }
 
       //this.options.savedata_data = new uint8[10];
@@ -116,10 +119,10 @@ namespace ToxVapi {
       print ("%s: %s\n", (string) result, message_string);
 
       switch (message_string) {
-        case "help":
-          var response = "Hi u', I'm a super simple bot made by Benwaffle & SkyzohKey. I run with Vala ! :D";
-          this.handle.friend_send_message (friend_number, MessageType.NORMAL, response.data, null);
-          break;
+      case "help":
+        var response = "Hi u', I'm a super simple bot made by Benwaffle & SkyzohKey. I run with Vala ! :D";
+        this.handle.friend_send_message (friend_number, MessageType.NORMAL, response.data, null);
+        break;
       }
     }
 
@@ -218,7 +221,7 @@ namespace ToxVapi {
       try {
         var tox_save = File.new_for_path (path);
         if (!tox_save.query_exists ()) {
-          error ("Error while loading Tox_Save: %s\n", path);
+          print ("Error while loading Tox_Save: %s\n", path);
         }
 
         FileInfo tox_save_info = tox_save.query_info ("*", FileQueryInfoFlags.NONE);
@@ -228,14 +231,15 @@ namespace ToxVapi {
         uint8[] buffer = new uint8[tox_save_size];
 
         if (data_stream.read (buffer) != tox_save_size) {
-          error ("Error while reading DataInputStream.\n");
+          print ("Error while reading DataInputStream.\n");
         }
 
         print ("Successfully loaded %s !\n", path);
 
         return buffer;
       } catch (Error e) {
-        error ("Error while loading tox_save: %s\n", e.message);
+        print ("Error while loading tox_save: %s\n", e.message);
+        return new uint8[0];
       }
     }
     public static bool save_tox_save (string path, uint8[] buffer, uint32 handle_size) {

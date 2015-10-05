@@ -3,3 +3,9 @@ bot:
 
 style:
 	astyle --options=astylerc vapi/libtoxcore.vapi Bot.vala
+
+clean:
+	rm .goutputstream-*
+
+run:
+	make style && make bot && make clean
