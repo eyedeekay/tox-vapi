@@ -133,9 +133,9 @@ namespace ToxVapi {
       this.handle.friend_add_norequest (public_key, null);
 
       // Save the friend in the .tox file.
-      uint32 size = this.handle.size ();
+      uint32 size = this.handle.get_savedata_size ();
       uint8[] buffer = new uint8[size];
-      this.handle.save (buffer);
+      this.handle.get_savedata (buffer);
       Tools.save_tox_save (this.TOX_SAVE, buffer, size);
     }
 

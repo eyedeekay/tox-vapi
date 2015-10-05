@@ -1120,10 +1120,8 @@ namespace Tox {
     public bool file_send_chunk (uint32 friend_number, uint32 file_number, uint64 position, uint8[] data, out TOX_ERR_FILE_SEND_CHUNK error);
 
     // System methods.
-    [CCode (cname="tox_get_savedata_size")]
-    public uint32 size();
-    [CCode (cname="tox_get_savedata")]
-    public void save([CCode(array_length=false)] uint8[] data);
+    public uint32 get_savedata_size();
+    public void get_savedata([CCode(array_length=false)] uint8[] data);
     public int load([CCode(array_length_type = "guint32")] uint8[] data);
     public bool bootstrap (string address, uint16 port, [CCode (array_length=false)] uint8[] public_key, out TOX_ERR_BOOTSTRAP error);
     public bool add_tcp_relay (string address, uint16 port, [CCode (array_length=false)] uint8[] public_key, out TOX_ERR_BOOTSTRAP error);
