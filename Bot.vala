@@ -1,13 +1,17 @@
 using GLib;
+//using Gio;
 using Tox;
 
 namespace ToxVapi {
   public class Bot : Object {
     private const string BOT_NAME = "ValaBot";
-    private const string BOT_MOOD = "A simple bot in Vala.";
+    private const string BOT_MOOD = "A simple bot in Vala - https://github.com/ValaTox/client";
     private const string GROUP_NAME = "Official ValaTox groupchat - https://github.com/ValaTox/client";
+    private const string TOX_SAVE = "Bot.tox";
 
     private Tox.Tox handle;
+    private Tox.Options options;
+
     private bool is_running = false;
     private bool is_connected = false;
 
@@ -18,15 +22,30 @@ namespace ToxVapi {
         Tox.Version.MINOR,
         Tox.Version.PATCH
       );
-      this.handle = new Tox.Tox (null, null);
-      bootstrap ();
+
+      this.options = Tox.Options () {
+        ipv6_enabled = true,
+        udp_enabled = true,
+        proxy_type = ProxyType.NONE,
+        savedata_type = SaveDataType.TOX_SAVE
+      };
+
+      // Load/Create the Tox_save.
+      lock (this.options) {
+          this.options.savedata_data = Tools.load_tox_save (this.TOX_SAVE);
+      }
+
+      //this.options.savedata_data = new uint8[10];
+
+      this.handle = new Tox.Tox (this.options, null);
+      this.bootstrap ();
       Timeout.add (handle.iteration_interval (), () => {
         handle.iterate ();
         return Source.CONTINUE;
       });
 
-      var user_name = this.BOT_NAME.data;
-      this.handle.self_set_name (user_name, null);
+      this.handle.self_set_name (this.BOT_NAME.data, null);
+      this.handle.self_set_status_message (this.BOT_MOOD.data, null);
 
       uint8[] name = new uint8[this.handle.self_get_name_size ()];
       this.handle.self_get_name (name);
@@ -83,8 +102,10 @@ namespace ToxVapi {
     public void on_connection_status (Tox.Tox handle, Tox.ConnectionStatus status) {
       if (status != Tox.ConnectionStatus.NONE) {
         print ("Connected to Tox\n");
+        this.is_connected = true;
       } else {
         print ("Disconnected\n");
+        this.is_connected = false;
       }
     }
 
@@ -107,6 +128,12 @@ namespace ToxVapi {
       var pkey = Tools.bin2hex (public_key);
       print ("Received a friend request from %s.\n", pkey);
       this.handle.friend_add_norequest (public_key, null);
+
+      // Save the friend in the .tox file.
+      uint32 size = this.handle.size ();
+      uint8[] buffer = new uint8[size];
+      this.handle.save (buffer);
+      Tools.save_tox_save (this.TOX_SAVE, buffer, size);
     }
 
     public void on_friend_status (Tox.Tox handle, uint32 friend_number, UserStatus status) {
@@ -178,6 +205,71 @@ namespace ToxVapi {
       GLib.Memory.copy (name, array, sizeof(uint8) * name.length);
       name[array.length] = '\0';
       return ((string) name).to_string ();
+    }
+    public static void create_path_for_file(string filename, int mode) {
+      string pathname = Path.get_dirname(filename);
+      File path = File.new_for_path(pathname);
+      if(!path.query_exists()) {
+        DirUtils.create_with_parents(pathname, mode);
+        print ("Created directory %s\n", pathname);
+      }
+    }
+    public static uint8[] load_tox_save (string path) {
+      try {
+        var tox_save = File.new_for_path (path);
+        if (!tox_save.query_exists ()) {
+          error ("Error while loading Tox_Save: %s\n", path);
+        }
+
+        FileInfo tox_save_info = tox_save.query_info ("*", FileQueryInfoFlags.NONE);
+        int64 tox_save_size = tox_save_info.get_size ();
+
+        var data_stream = new DataInputStream (tox_save.read ());
+        uint8[] buffer = new uint8[tox_save_size];
+
+        if (data_stream.read (buffer) != tox_save_size) {
+          error ("Error while reading DataInputStream.\n");
+        }
+
+        print ("Successfully loaded %s !\n", path);
+
+        return buffer;
+      } catch (Error e) {
+        error ("Error while loading tox_save: %s\n", e.message);
+      }
+    }
+    public static bool save_tox_save (string path, uint8[] buffer, uint32 handle_size) {
+      try {
+        print ("Trying to save %s (%u kb) ...", path, handle_size);
+
+
+        var tox_save = File.new_for_path (path);
+        if (!tox_save.query_exists ()) {
+          Tools.create_path_for_file (path, 0755);
+        }
+
+        DataOutputStream data_stream = new DataOutputStream (
+          tox_save.replace (
+            null,
+            false,
+            FileCreateFlags.PRIVATE | FileCreateFlags.REPLACE_DESTINATION
+          )
+        );
+
+        assert (handle_size != 0);
+        if (data_stream.write (buffer) != 0) {
+          print ("Error while writing DataOutputStream.\n");
+          /*return false;*/
+        }
+
+        print ("Successfully saved %s !\n", path);
+        //return true;
+      } catch (Error e) {
+        error ("Error writing the Tox_save: %s\n", e.message);
+        return false;
+      }
+
+      return true;
     }
   }
 }
