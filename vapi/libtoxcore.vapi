@@ -1092,6 +1092,11 @@ namespace Tox {
     public size_t self_get_friend_list_size ();
     public void self_get_friend_list ([CCode (array_length = false)] uint32[] friend_list);
 
+    public uint32 nospam {
+        [CCode (cname="tox_self_get_nospam")] get;
+        [CCode (cname="tox_self_set_nospam")] set;
+    }
+
     // Friend methods.
     public uint32 friend_add ([CCode (array_length=false)] uint8[] address, uint8[] message, out TOX_ERR_FRIEND_ADD error);
     public uint32 friend_add_norequest ([CCode (array_length=false)] uint8[] public_key, out TOX_ERR_FRIEND_ADD error);
