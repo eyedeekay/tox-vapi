@@ -96,7 +96,7 @@ namespace ToxVapi {
 
       switch (message_string) {
         case "help":
-          var response = "Hi u', I'm a super simple bot made by SkyzohKey. I run with Vala ! :D";
+          var response = "Hi u', I'm a super simple bot made by Benwaffle & SkyzohKey. I run with Vala ! :D";
           this.handle.friend_send_message (friend_number, MessageType.NORMAL, response.data, null);
           break;
       }
