@@ -59,10 +59,10 @@ namespace ToxVapi {
       print ("ToxID: %s\n", Tools.bin2hex (toxid));
 
       // Callbacks.
-      this.handle.connection_status_callback (this.on_connection_status);
-      this.handle.friend_message_callback (this.on_friend_message);
-      this.handle.friend_request_callback (this.on_friend_request);
-      this.handle.friend_status_callback (this.on_friend_status);
+      this.handle.callback_self_connection_status (this.on_connection_status);
+      this.handle.callback_friend_message (this.on_friend_message);
+      this.handle.callback_friend_request (this.on_friend_request);
+      this.handle.callback_friend_status (this.on_friend_status);
 
       new MainLoop ().run ();
     }
