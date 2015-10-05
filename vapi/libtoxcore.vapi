@@ -1,10 +1,8 @@
 /**
-*       COPYRIGHT (c) 2015 SkyzohKey
-*
 *       DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
 *               Version 2, December 2004
 *
-*       Copyright (C) 2004 Sam Hocevar <sam@hocevar.net>
+*       Copyright (C) 2015 SkyzohKey, benwaffle
 *
 *       Everyone is permitted to copy and distribute verbatim or modified
 *       copies of this license document, and changing it is allowed as long
@@ -1077,7 +1075,7 @@ namespace Tox {
 
     // Methods.
     [CCode (cname="tox_new")]
-    public Tox (Options? options = null, out TOX_ERR_NEW? error = null) {}
+    public Tox (Options? options = null, out TOX_ERR_NEW? error = null);
 
     // Self methods.
     public ConnectionStatus self_get_connection_status ();

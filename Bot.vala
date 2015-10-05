@@ -174,7 +174,7 @@ namespace ToxVapi {
       return buf;
     }
     public static string bin2hex (uint8[] bin)
-    requires (bin.length != 0)
+        requires (bin.length != 0)
     {
       StringBuilder b = new StringBuilder ();
       for (int i = 0; i < bin.length; ++i) {
