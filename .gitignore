@@ -6,3 +6,6 @@ Bot
 
 # GOuput
 .goutputstream-*
+
+# Tox profiles
+*.tox
