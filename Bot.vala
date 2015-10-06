@@ -8,7 +8,6 @@ namespace ToxVapi {
         private const string TOX_SAVE = "Bot.tox";
 
         private Tox handle;
-        private Options options;
 
         private bool connected = false;
 
@@ -22,7 +21,7 @@ namespace ToxVapi {
                 ToxCore.Version.PATCH
             );
 
-            this.options = Options () {
+            var options = Options () {
                 ipv6_enabled = true,
                 udp_enabled = true,
                 proxy_type = ProxyType.NONE
@@ -30,11 +29,11 @@ namespace ToxVapi {
 
             // Load/Create the Tox_save.
             if (FileUtils.test (this.TOX_SAVE, FileTest.EXISTS)) {
-                FileUtils.get_data (this.TOX_SAVE, out this.options.savedata_data);
-                this.options.savedata_type = SaveDataType.TOX_SAVE;
+                FileUtils.get_data (this.TOX_SAVE, out options.savedata_data);
+                options.savedata_type = SaveDataType.TOX_SAVE;
             }
 
-            this.handle = new Tox (this.options, null);
+            this.handle = new Tox (options, null);
             this.bootstrap ();
             Timeout.add (handle.iteration_interval (), () => {
                 handle.iterate ();
