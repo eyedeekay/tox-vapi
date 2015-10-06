@@ -12,6 +12,8 @@ namespace ToxVapi {
 
         private bool connected = false;
 
+        private MainLoop loop = new MainLoop ();
+
         public Bot () {
             print (
                 "Running Toxcore version %u.%u.%u\n",
@@ -64,7 +66,7 @@ namespace ToxVapi {
             this.handle.callback_friend_request (this.on_friend_request);
             this.handle.callback_friend_status (this.on_friend_status);
 
-            new MainLoop ().run ();
+            loop.run ();
         }
 
         private void bootstrap () {
@@ -113,9 +115,9 @@ namespace ToxVapi {
                     this.handle.friend_send_message (friend_number, MessageType.NORMAL, "saving .tox file".data, null);
                     this.save_data ();
                     break;
-                case "help":
-                    var response = "Hi u', I'm a super simple bot made by Benwaffle & SkyzohKey. I run with Vala ! :D";
-                    this.handle.friend_send_message (friend_number, MessageType.NORMAL, response.data, null);
+                case "quit":
+                    this.handle.friend_send_message (friend_number, MessageType.NORMAL, "quitting".data, null);
+                    loop.quit ();
                     break;
             }
         }
