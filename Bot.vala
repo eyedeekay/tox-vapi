@@ -1,6 +1,4 @@
-using GLib;
-//using Gio;
-using Tox;
+using ToxCore;
 
 namespace ToxVapi {
   public class Bot : Object {
@@ -9,8 +7,8 @@ namespace ToxVapi {
     private const string GROUP_NAME = "Official ValaTox groupchat - https://github.com/ValaTox/client";
     private const string TOX_SAVE = "Bot.tox";
 
-    private Tox.Tox handle;
-    private Tox.Options options;
+    private Tox handle;
+    private Options options;
 
     private bool is_running = false;
     private bool is_connected = false;
@@ -18,12 +16,12 @@ namespace ToxVapi {
     public Bot () {
       print (
         "Running Toxcore version %u.%u.%u\n",
-        Tox.Version.MAJOR,
-        Tox.Version.MINOR,
-        Tox.Version.PATCH
+        ToxCore.Version.MAJOR,
+        ToxCore.Version.MINOR,
+        ToxCore.Version.PATCH
       );
 
-      this.options = Tox.Options () {
+      this.options = Options () {
         ipv6_enabled = true,
         udp_enabled = true,
         proxy_type = ProxyType.NONE
@@ -40,7 +38,7 @@ namespace ToxVapi {
 
       //this.options.savedata_data = new uint8[10];
 
-      this.handle = new Tox.Tox (this.options, null);
+      this.handle = new Tox (this.options, null);
       this.bootstrap ();
       Timeout.add (handle.iteration_interval (), () => {
         handle.iterate ();
@@ -54,7 +52,7 @@ namespace ToxVapi {
       this.handle.self_get_name (name);
       print ("Tox name: %s\n", Tools.bin2nullterm (name));
 
-      uint8[] toxid = new uint8[Tox.ADDRESS_SIZE];
+      uint8[] toxid = new uint8[ADDRESS_SIZE];
       this.handle.self_get_address (toxid);
       print ("ToxID: %s\n", Tools.bin2hex (toxid));
 
@@ -102,8 +100,8 @@ namespace ToxVapi {
     this.handle.friend_add (friend_toxid, Tools.hex2bin (message), null);
     */
 
-    public void on_connection_status (Tox.Tox handle, Tox.ConnectionStatus status) {
-      if (status != Tox.ConnectionStatus.NONE) {
+    public void on_connection_status (Tox handle, ConnectionStatus status) {
+      if (status != ConnectionStatus.NONE) {
         print ("Connected to Tox\n");
         this.is_connected = true;
       } else {
@@ -112,9 +110,9 @@ namespace ToxVapi {
       }
     }
 
-    public void on_friend_message (Tox.Tox handle, uint32 friend_number, Tox.MessageType type, uint8[] message) {
+    public void on_friend_message (Tox handle, uint32 friend_number, MessageType type, uint8[] message) {
       string message_string = (string) message;
-      uint8[] result = new uint8[Tox.MAX_NAME_LENGTH];
+      uint8[] result = new uint8[MAX_NAME_LENGTH];
       this.handle.friend_get_name (friend_number, result, null);
       print ("%s: %s\n", (string) result, message_string);
 
@@ -126,8 +124,8 @@ namespace ToxVapi {
       }
     }
 
-    public void on_friend_request (Tox.Tox handle, uint8[] public_key, uint8[] message) {
-      public_key.length = Tox.PUBLIC_KEY_SIZE; // Fix an issue with Vala.
+    public void on_friend_request (Tox handle, uint8[] public_key, uint8[] message) {
+      public_key.length = PUBLIC_KEY_SIZE; // Fix an issue with Vala.
       var pkey = Tools.bin2hex (public_key);
       print ("Received a friend request from %s.\n", pkey);
       this.handle.friend_add_norequest (public_key, null);
@@ -139,8 +137,8 @@ namespace ToxVapi {
       Tools.save_tox_save (this.TOX_SAVE, buffer, size);
     }
 
-    public void on_friend_status (Tox.Tox handle, uint32 friend_number, UserStatus status) {
-      uint8[] result = new uint8[Tox.MAX_NAME_LENGTH];
+    public void on_friend_status (Tox handle, uint32 friend_number, UserStatus status) {
+      uint8[] result = new uint8[MAX_NAME_LENGTH];
       var name = this.handle.friend_get_name (friend_number, result, null);
       string _status = "Offline";
 

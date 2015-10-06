@@ -14,9 +14,8 @@
 *       0. You just DO WHAT THE FUCK YOU WANT TO.
 */
 
-[CCode (cheader_filename="tox/tox.h", cprefix="Tox_")]
-namespace Tox {
-  [CCode (cprefix="TOX_VERSION_")]
+[CCode (cheader_filename="tox/tox.h", cprefix="Tox", lower_case_cprefix="tox_")]
+namespace ToxCore {
   namespace Version {
     /**
      * The major version number. Incremented when the API or ABI changes in an
