@@ -28,13 +28,10 @@ namespace ToxVapi {
             };
 
             // Load/Create the Tox_save.
-            var save = Tools.load_tox_save (this.TOX_SAVE);
-            if (save.length != 0) {
+            if (FileUtils.test (this.TOX_SAVE, FileTest.EXISTS)) {
+                FileUtils.get_data (this.TOX_SAVE, out this.options.savedata_data);
                 this.options.savedata_type = SaveDataType.TOX_SAVE;
-                this.options.savedata_data = save;
             }
-
-            //this.options.savedata_data = new uint8[10];
 
             this.handle = new Tox (this.options, null);
             this.bootstrap ();
@@ -210,31 +207,6 @@ namespace ToxVapi {
             if(!path.query_exists()) {
                 DirUtils.create_with_parents(pathname, mode);
                 print ("Created directory %s\n", pathname);
-            }
-        }
-        public static uint8[] load_tox_save (string path) {
-            try {
-                var tox_save = File.new_for_path (path);
-                if (!tox_save.query_exists ()) {
-                    print ("Error while loading Tox_Save: %s\n", path);
-                }
-
-                FileInfo tox_save_info = tox_save.query_info ("*", FileQueryInfoFlags.NONE);
-                int64 tox_save_size = tox_save_info.get_size ();
-
-                var data_stream = new DataInputStream (tox_save.read ());
-                uint8[] buffer = new uint8[tox_save_size];
-
-                if (data_stream.read (buffer) != tox_save_size) {
-                    print ("Error while reading DataInputStream.\n");
-                }
-
-                print ("Successfully loaded %s !\n", path);
-
-                return buffer;
-            } catch (Error e) {
-                print ("Error while loading tox_save: %s\n", e.message);
-                return new uint8[0];
             }
         }
         public static bool save_tox_save (string path, uint8[] buffer, uint32 handle_size) {
