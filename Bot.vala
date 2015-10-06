@@ -109,6 +109,10 @@ namespace ToxVapi {
             print ("%s: %s\n", (string) result, message_string);
 
             switch (message_string) {
+                case "save":
+                    this.handle.friend_send_message (friend_number, MessageType.NORMAL, "saving .tox file".data, null);
+                    this.save_data ();
+                    break;
                 case "help":
                     var response = "Hi u', I'm a super simple bot made by Benwaffle & SkyzohKey. I run with Vala ! :D";
                     this.handle.friend_send_message (friend_number, MessageType.NORMAL, response.data, null);
@@ -123,10 +127,7 @@ namespace ToxVapi {
             this.handle.friend_add_norequest (public_key, null);
 
             // Save the friend in the .tox file.
-            uint32 size = this.handle.get_savedata_size ();
-            uint8[] buffer = new uint8[size];
-            this.handle.get_savedata (buffer);
-            Tools.save_tox_save (this.TOX_SAVE, buffer, size);
+            this.save_data ();
         }
 
         public void on_friend_status (Tox handle, uint32 friend_number, UserStatus status) {
@@ -150,6 +151,14 @@ namespace ToxVapi {
             }
 
             print ("%s is now %s\n", Tools.bin2nullterm (result), _status);
+        }
+
+        public bool save_data () {
+            info ("saving data to " + this.TOX_SAVE);
+            uint32 size = this.handle.get_savedata_size ();
+            uint8[] buffer = new uint8[size];
+            this.handle.get_savedata (buffer);
+            return FileUtils.set_data (this.TOX_SAVE, buffer);
         }
     }
 
@@ -198,50 +207,10 @@ namespace ToxVapi {
             name[array.length] = '\0';
             return ((string) name).to_string ();
         }
-        public static void create_path_for_file(string filename, int mode) {
-            string pathname = Path.get_dirname(filename);
-            File path = File.new_for_path(pathname);
-            if(!path.query_exists()) {
-                DirUtils.create_with_parents(pathname, mode);
-                print ("Created directory %s\n", pathname);
-            }
-        }
-        public static bool save_tox_save (string path, uint8[] buffer, uint32 handle_size) {
-            try {
-                print ("Trying to save %s (%u kb) ...", path, handle_size);
-
-
-                var tox_save = File.new_for_path (path);
-                if (!tox_save.query_exists ()) {
-                    Tools.create_path_for_file (path, 0755);
-                }
-
-                DataOutputStream data_stream = new DataOutputStream (
-                    tox_save.replace (
-                        null,
-                        false,
-                        FileCreateFlags.PRIVATE | FileCreateFlags.REPLACE_DESTINATION
-                    )
-                );
-
-                assert (handle_size != 0);
-                if (data_stream.write (buffer) != 0) {
-                    print ("Error while writing DataOutputStream.\n");
-                    /*return false;*/
-                }
-
-                print ("Successfully saved %s !\n", path);
-                //return true;
-            } catch (Error e) {
-                error ("Error writing the Tox_save: %s\n", e.message);
-                return false;
-            }
-
-            return true;
-        }
     }
 }
 
 void main() {
-    new ToxVapi.Bot ();
+    var bot = new ToxVapi.Bot ();
+    bot.save_data (); // always save data on exit
 }
