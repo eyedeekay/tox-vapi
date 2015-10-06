@@ -10,8 +10,7 @@ namespace ToxVapi {
         private Tox handle;
         private Options options;
 
-        private bool is_running = false;
-        private bool is_connected = false;
+        private bool connected = false;
 
         public Bot () {
             print (
@@ -52,7 +51,15 @@ namespace ToxVapi {
             print ("ToxID: %s\n", Tools.bin2hex (toxid));
 
             // Callbacks.
-            this.handle.callback_self_connection_status (this.on_connection_status);
+            this.handle.callback_self_connection_status ((handle, status) => {
+                if (status != ConnectionStatus.NONE) {
+                    print ("Connected to Tox\n");
+                    this.connected = true;
+                } else {
+                    print ("Disconnected\n");
+                    this.connected = false;
+                }
+            });
             this.handle.callback_friend_message (this.on_friend_message);
             this.handle.callback_friend_request (this.on_friend_request);
             this.handle.callback_friend_status (this.on_friend_status);
@@ -94,16 +101,6 @@ namespace ToxVapi {
         stdout.printf("Sending a friend request to %s: \"%s\"\n", Tools.bin2hex (friend_toxid), message);
         this.handle.friend_add (friend_toxid, Tools.hex2bin (message), null);
         */
-
-        public void on_connection_status (Tox handle, ConnectionStatus status) {
-            if (status != ConnectionStatus.NONE) {
-                print ("Connected to Tox\n");
-                this.is_connected = true;
-            } else {
-                print ("Disconnected\n");
-                this.is_connected = false;
-            }
-        }
 
         public void on_friend_message (Tox handle, uint32 friend_number, MessageType type, uint8[] message) {
             string message_string = (string) message;
