@@ -324,7 +324,7 @@ namespace ToxCore {
      ******************************************************************************/
 
     [CCode (cname="TOX_ERR_NEW", cprefix = "TOX_ERR_NEW_")]
-    public enum TOX_ERR_NEW {
+    public enum ERR_NEW {
         /**
          * The function returned successfully.
          */
@@ -385,7 +385,7 @@ namespace ToxCore {
     }
 
     [CCode (cname="TOX_ERR_OPTIONS_NEW", cprefix="TOX_ERR_OPTIONS_NEW_")]
-    public enum TOX_ERR_OPTIONS_NEW {
+    public enum ERR_OPTIONS_NEW {
         /**
         * The function returned successfully.
         */
@@ -446,7 +446,7 @@ namespace ToxCore {
     }
 
     [CCode (cname="TOX_ERR_BOOTSTRAP", cprefix="TOX_ERR_BOOTSTRAP_")]
-    public enum TOX_ERR_BOOTSTRAP {
+    public enum ERR_BOOTSTRAP {
         /**
         * The function returned successfully.
         */
@@ -470,7 +470,7 @@ namespace ToxCore {
     }
 
     [CCode (cname="TOX_ERR_SET_INFO", cprefix="TOX_ERR_SET_INFO_")]
-    public enum TOX_ERR_SET_INFO {
+    public enum ERR_SET_INFO {
         /**
         * The function returned successfully.
         */
@@ -488,7 +488,7 @@ namespace ToxCore {
     }
 
     [CCode (cname="TOX_ERR_FRIEND_ADD", cprefix="TOX_ERR_FRIEND_ADD_")]
-    public enum TOX_ERR_FRIEND_ADD {
+    public enum ERR_FRIEND_ADD {
         /**
         * The function returned successfully.
         */
@@ -539,7 +539,7 @@ namespace ToxCore {
     }
 
     [CCode (cname="TOX_ERR_FRIEND_DELETE", cprefix="TOX_ERR_FRIEND_DELETE_")]
-    public enum TOX_ERR_FRIEND_DELETE {
+    public enum ERR_FRIEND_DELETE {
         /**
         * The function returned successfully.
         */
@@ -552,7 +552,7 @@ namespace ToxCore {
     }
 
     [CCode (cname="TOX_ERR_FRIEND_BY_PUBLIC_KEY", cprefix="TOX_ERR_FRIEND_BY_PUBLIC_KEY_")]
-    public enum TOX_ERR_FRIEND_BY_PUBLIC_KEY {
+    public enum ERR_FRIEND_BY_PUBLIC_KEY {
         /**
         * The function returned successfully.
         */
@@ -570,7 +570,7 @@ namespace ToxCore {
     }
 
     [CCode (cname="TOX_ERR_FRIEND_GET_PUBLIC_KEY", cprefix="TOX_ERR_FRIEND_GET_PUBLIC_KEY_")]
-    public enum TOX_ERR_FRIEND_GET_PUBLIC_KEY {
+    public enum ERR_FRIEND_GET_PUBLIC_KEY {
         /**
         * The function returned successfully.
         */
@@ -583,7 +583,7 @@ namespace ToxCore {
     }
 
     [CCode (cname="TOX_ERR_FRIEND_GET_LAST_ONLINE", cprefix="TOX_ERR_FRIEND_GET_LAST_ONLINE_")]
-    public enum TOX_ERR_FRIEND_GET_LAST_ONLINE {
+    public enum ERR_FRIEND_GET_LAST_ONLINE {
         /**
         * The function returned successfully.
         */
@@ -596,7 +596,7 @@ namespace ToxCore {
     }
 
     [CCode (cname="TOX_ERR_FRIEND_QUERY", cprefix="TOX_ERR_FRIEND_QUERY_")]
-    public enum TOX_ERR_FRIEND_QUERY {
+    public enum ERR_FRIEND_QUERY {
         /**
         * The function returned successfully.
         */
@@ -618,7 +618,7 @@ namespace ToxCore {
     }
 
     [CCode (cname="TOX_ERR_SET_TYPING", cprefix="TOX_ERR_SET_TYPING_")]
-    public enum TOX_ERR_SET_TYPING {
+    public enum ERR_SET_TYPING {
         /**
         * The function returned successfully.
         */
@@ -631,7 +631,7 @@ namespace ToxCore {
     }
 
     [CCode (cname="TOX_ERR_FRIEND_SEND_MESSAGE", cprefix="TOX_ERR_FRIEND_SEND_MESSAGE_")]
-    public enum TOX_ERR_FRIEND_SEND_MESSAGE {
+    public enum ERR_FRIEND_SEND_MESSAGE {
         /**
         * The function returned successfully.
         */
@@ -669,7 +669,7 @@ namespace ToxCore {
     }
 
     [CCode (cname="TOX_ERR_FILE_CONTROL", cprefix="TOX_ERR_FILE_CONTROL_")]
-    public enum TOX_ERR_FILE_CONTROL {
+    public enum ERR_FILE_CONTROL {
         /**
         * The function returned successfully.
         */
@@ -713,7 +713,7 @@ namespace ToxCore {
     }
 
     [CCode (cname="TOX_ERR_FILE_SEEK", cprefix="TOX_ERR_FILE_SEEK_")]
-    public enum TOX_ERR_FILE_SEEK {
+    public enum ERR_FILE_SEEK {
         /**
         * The function returned successfully.
         */
@@ -751,7 +751,7 @@ namespace ToxCore {
     }
 
     [CCode (cname="TOX_ERR_FILE_GET", cprefix="TOX_ERR_FILE_GET_")]
-    public enum TOX_ERR_FILE_GET {
+    public enum ERR_FILE_GET {
         /**
         * The function returned successfully.
         */
@@ -774,7 +774,7 @@ namespace ToxCore {
     }
 
     [CCode (cname="TOX_ERR_FILE_SEND", cprefix="TOX_ERR_FILE_SEND_")]
-    public enum TOX_ERR_FILE_SEND {
+    public enum ERR_FILE_SEND {
         /**
         * The function returned successfully.
         */
@@ -808,7 +808,7 @@ namespace ToxCore {
     }
 
     [CCode (cname="TOX_ERR_FILE_SEND_CHUNK", cprefix="TOX_ERR_FILE_SEND_CHUNK_")]
-    public enum TOX_ERR_FILE_SEND_CHUNK {
+    public enum ERR_FILE_SEND_CHUNK {
         /**
         * The function returned successfully.
         */
@@ -860,7 +860,7 @@ namespace ToxCore {
     }
 
     [CCode (cname="TOX_ERR_FRIEND_CUSTOM_PACKET", cprefix="TOX_ERR_FRIEND_CUSTOM_PACKET_")]
-    public enum TOX_ERR_FRIEND_CUSTOM_PACKET {
+    public enum ERR_FRIEND_CUSTOM_PACKET {
         /**
         * The function returned successfully.
         */
@@ -904,7 +904,7 @@ namespace ToxCore {
     }
 
     [CCode (cname="TOX_ERR_GET_PORT", cprefix="TOX_ERR_GET_PORT_")]
-    public enum TOX_ERR_GET_PORT {
+    public enum ERR_GET_PORT {
         /**
         * The function returned successfully.
         */
@@ -1074,20 +1074,20 @@ namespace ToxCore {
 
         // Methods.
         [CCode (cname="tox_new")]
-        public Tox (Options? options = null, out TOX_ERR_NEW? error = null);
+        public Tox (Options? options = null, out ERR_NEW? error = null);
 
         // Self methods.
         public ConnectionStatus self_get_connection_status ();
         public void self_get_address ([CCode (array_length=false)] uint8[] address);
         public void self_get_public_key ([CCode (array_length=false)] uint8[] public_key);
         public void self_get_secret_key ([CCode (array_length=false)] uint8[] secret_key);
-        public bool self_set_name (uint8[] name, out TOX_ERR_SET_INFO error);
+        public bool self_set_name (uint8[] name, out ERR_SET_INFO error);
         public size_t self_get_name_size ();
         public void self_get_name ([CCode (array_length = false)] uint8[] name);
-        public bool self_set_status_message (uint8[] status_message, out TOX_ERR_SET_INFO error);
+        public bool self_set_status_message (uint8[] status_message, out ERR_SET_INFO error);
         public size_t self_get_status_message_size ();
         public void self_get_status_message ([CCode (array_length=false)] uint8[] status_message);
-        public bool self_set_typing (uint32 friend_number, bool is_typing, out TOX_ERR_FRIEND_DELETE error);
+        public bool self_set_typing (uint32 friend_number, bool is_typing, out ERR_FRIEND_DELETE error);
         public size_t self_get_friend_list_size ();
         public void self_get_friend_list ([CCode (array_length = false)] uint32[] friend_list);
 
@@ -1097,36 +1097,36 @@ namespace ToxCore {
         }
 
         // Friend methods.
-        public uint32 friend_add ([CCode (array_length=false)] uint8[] address, uint8[] message, out TOX_ERR_FRIEND_ADD error);
-        public uint32 friend_add_norequest ([CCode (array_length=false)] uint8[] public_key, out TOX_ERR_FRIEND_ADD error);
-        public bool friend_delete (uint32 friend_number, out TOX_ERR_FRIEND_DELETE error);
-        public uint32 friend_by_public_key ([CCode (array_length=false)] uint8[] public_key, out TOX_ERR_FRIEND_BY_PUBLIC_KEY error);
+        public uint32 friend_add ([CCode (array_length=false)] uint8[] address, uint8[] message, out ERR_FRIEND_ADD error);
+        public uint32 friend_add_norequest ([CCode (array_length=false)] uint8[] public_key, out ERR_FRIEND_ADD error);
+        public bool friend_delete (uint32 friend_number, out ERR_FRIEND_DELETE error);
+        public uint32 friend_by_public_key ([CCode (array_length=false)] uint8[] public_key, out ERR_FRIEND_BY_PUBLIC_KEY error);
         public bool friend_exists (uint32 friend_number);
-        public bool friend_get_public_key (uint32 friend_number, [CCode (array_length=false)] uint8[] public_key, out TOX_ERR_FRIEND_GET_PUBLIC_KEY error);
-        public uint64 friend_get_last_online (uint32 friend_number, out TOX_ERR_FRIEND_GET_LAST_ONLINE error);
-        public size_t friend_get_name_size (uint32 friend_number, out TOX_ERR_FRIEND_QUERY error);
-        public bool friend_get_name (uint32 friend_number, [CCode (array_length=false)] uint8[] name, out TOX_ERR_FRIEND_QUERY error);
-        public size_t friend_get_status_message_size (uint32 friend_number, out TOX_ERR_FRIEND_QUERY error);
-        public bool friend_get_status_message (uint32 friend_number, [CCode (array_length=false)] uint8[] status_message, out TOX_ERR_FRIEND_QUERY error);
-        public UserStatus friend_get_status (uint32 friend_number, out TOX_ERR_FRIEND_QUERY error);
-        public ConnectionStatus friend_get_connection_status (uint32 friend_number, out TOX_ERR_FRIEND_QUERY error);
-        public bool friend_get_typing (uint32 friend_number, out TOX_ERR_FRIEND_QUERY error);
-        public uint32 friend_send_message (uint32 friend_number, MessageType type, uint8[] message, out TOX_ERR_FRIEND_SEND_MESSAGE error);
+        public bool friend_get_public_key (uint32 friend_number, [CCode (array_length=false)] uint8[] public_key, out ERR_FRIEND_GET_PUBLIC_KEY error);
+        public uint64 friend_get_last_online (uint32 friend_number, out ERR_FRIEND_GET_LAST_ONLINE error);
+        public size_t friend_get_name_size (uint32 friend_number, out ERR_FRIEND_QUERY error);
+        public bool friend_get_name (uint32 friend_number, [CCode (array_length=false)] uint8[] name, out ERR_FRIEND_QUERY error);
+        public size_t friend_get_status_message_size (uint32 friend_number, out ERR_FRIEND_QUERY error);
+        public bool friend_get_status_message (uint32 friend_number, [CCode (array_length=false)] uint8[] status_message, out ERR_FRIEND_QUERY error);
+        public UserStatus friend_get_status (uint32 friend_number, out ERR_FRIEND_QUERY error);
+        public ConnectionStatus friend_get_connection_status (uint32 friend_number, out ERR_FRIEND_QUERY error);
+        public bool friend_get_typing (uint32 friend_number, out ERR_FRIEND_QUERY error);
+        public uint32 friend_send_message (uint32 friend_number, MessageType type, uint8[] message, out ERR_FRIEND_SEND_MESSAGE error);
 
         // File methods.
         public bool hash ([CCode (array_length=false)] uint8[] hash, uint8[] data);
-        public bool file_control (uint32 friend_number, uint32 file_number, FileControlStatus control, out TOX_ERR_FILE_CONTROL error);
-        public bool file_seek (uint32 friend_number, uint32 file_number, int64 position, out TOX_ERR_FILE_SEEK error);
-        public bool file_get_file_id (uint32 friend_number, uint32 file_number, [CCode (array_length=false)] uint8[] file_id, out TOX_ERR_FILE_GET error);
-        public uint32 file_send (uint32 friend_number, FileKind kind, uint64 file_size, [CCode (array_length=false)] uint8[]? file_id, uint8[] filename, out TOX_ERR_FILE_SEND error);
-        public bool file_send_chunk (uint32 friend_number, uint32 file_number, uint64 position, uint8[] data, out TOX_ERR_FILE_SEND_CHUNK error);
+        public bool file_control (uint32 friend_number, uint32 file_number, FileControlStatus control, out ERR_FILE_CONTROL error);
+        public bool file_seek (uint32 friend_number, uint32 file_number, int64 position, out ERR_FILE_SEEK error);
+        public bool file_get_file_id (uint32 friend_number, uint32 file_number, [CCode (array_length=false)] uint8[] file_id, out ERR_FILE_GET error);
+        public uint32 file_send (uint32 friend_number, FileKind kind, uint64 file_size, [CCode (array_length=false)] uint8[]? file_id, uint8[] filename, out ERR_FILE_SEND error);
+        public bool file_send_chunk (uint32 friend_number, uint32 file_number, uint64 position, uint8[] data, out ERR_FILE_SEND_CHUNK error);
 
         // System methods.
         public uint32 get_savedata_size();
         public void get_savedata([CCode(array_length=false)] uint8[] data);
         public int load([CCode(array_length_type="guint32")] uint8[] data);
-        public bool bootstrap (string address, uint16 port, [CCode (array_length=false)] uint8[] public_key, out TOX_ERR_BOOTSTRAP error);
-        public bool add_tcp_relay (string address, uint16 port, [CCode (array_length=false)] uint8[] public_key, out TOX_ERR_BOOTSTRAP error);
+        public bool bootstrap (string address, uint16 port, [CCode (array_length=false)] uint8[] public_key, out ERR_BOOTSTRAP error);
+        public bool add_tcp_relay (string address, uint16 port, [CCode (array_length=false)] uint8[] public_key, out ERR_BOOTSTRAP error);
         public uint32 iteration_interval ();
         public void iterate ();
     }
