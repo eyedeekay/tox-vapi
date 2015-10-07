@@ -8,7 +8,7 @@ DEBVERSION=$(date +%Y%m%d)"-0.2.8"
 
 cd $DEBFOLDER
 
-git pull cmotc master
+git pull cmotc debian-toxcore
 
 DEBFOLDERNAME=$DEBFOLDER-$DEBVERSION
 
@@ -18,13 +18,16 @@ cp -R ./ "../$DEBFOLDERNAME"
 # Copy your script to the source dir
 cd "../$DEBFOLDERNAME"
 
-# Create the packaging skeleton (debian/*)
-dh_make -s --indep --createorig 
+touch ".goutputstream-$(date +%Y%m%d)"
 
 mkdir -p debian/tmp/usr/share/vala-0.2.8/
 #mkdir -p debian/tmp/usr/share/docs
 
-mv "vapi" debian/tmp/usr/share/vala-0.2.8/vapi
+cp -Rv "vapi" debian/tmp/usr/share/vala-0.2.8/
+
+# Create the packaging skeleton (debian/*)
+dh_make -s --indep --createorig 
+
 # Remove make calls
 #grep -v makefile debian/rules > debian/rules.new 
 #mv debian/rules.new debian/rules 
@@ -36,6 +39,7 @@ echo usr/share/vala-0.2.8/vapi/$SOURCELIB usr/share/vala-0.2.8/vapi > debian/ins
 
 # Remove the example files
 rm debian/*.ex
+rm debian/*.EX
 
 # Build the package.
 # You  will get a lot of warnings and ../somescripts_0.1-1_i386.deb

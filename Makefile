@@ -1,3 +1,7 @@
+pkg:
+	touch tmp
+	rm tmp
+
 bot:
 	vala "--vapidir=vapi --pkg=libtoxcore --pkg=gio-2.0 --target-glib=2.32 -g -X -fsanitize=address" Bot.vala
 
