@@ -1,5 +1,14 @@
 bot:
-	vala "--vapidir=vapi --pkg=libtoxcore --pkg=gio-2.0 --target-glib=2.32 -g -X -fsanitize=address" Bot.vala
+	vala \
+		"--vapidir=vapi \
+		--pkg=gio-2.0 \
+		--pkg=libsoup-2.4 \
+		--pkg=json-glib-1.0 \
+		--pkg=libtoxcore \
+		--target-glib=2.32 \
+		-g \
+		-X -fsanitize=address" \
+		Bot.vala
 
 # just a demo, temporarily
 download_nodes:

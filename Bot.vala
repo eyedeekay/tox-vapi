@@ -5,7 +5,7 @@ namespace ToxVapi {
         private const string BOT_NAME = "ValaBot";
         private const string BOT_MOOD = "A simple bot in Vala - https://github.com/ValaTox/client";
         private const string GROUP_NAME = "Official ValaTox groupchat - https://github.com/ValaTox/client";
-        private const string TOX_SAVE = "Bot.tox";
+        private string TOX_SAVE = "Bot.tox";
 
         private Tox handle;
 
@@ -34,7 +34,7 @@ namespace ToxVapi {
             }
 
             this.handle = new Tox (options, null);
-            this.bootstrap ();
+            this.bootstrap.begin ();
             Timeout.add (handle.iteration_interval (), () => {
                 handle.iterate ();
                 return Source.CONTINUE;
@@ -68,31 +68,47 @@ namespace ToxVapi {
             loop.run ();
         }
 
-        private void bootstrap () {
-            this.handle.bootstrap (
-                "195.154.119.113",
-                33445,
-                Tools.hex2bin ("E398A69646B8CEACA9F0B84F553726C1C49270558C57DF5F3C368F05A7D71354"),
-                null
-            );
-            this.handle.bootstrap (
-                "144.76.60.215",
-                33445,
-                Tools.hex2bin ("04119E835DF3E78BACF0F84235B300546AF8B936F035185E2A8E9E0A67C8924F"),
-                null
-            );
-            this.handle.bootstrap (
-                "205.185.116.116",
-                33445,
-                Tools.hex2bin ("A179B09749AC826FF01F37A9613F6B57118AE014D4196A0E1105A98F93A54702"),
-                null
-            );
-            this.handle.bootstrap (
-                "212.71.252.109",
-                33445,
-                Tools.hex2bin ("C4CEB8C7AC607C6B374E2E782B3C00EA3A63B80D4910B8649CCACDD19F260819"),
-                null
-            );
+        class Server : Object {
+            public string owner { get; set; }
+            public string region { get; set; }
+            public string ipv4 { get; set; }
+            public string ipv6 { get; set; }
+            public uint64 port { get; set; }
+            public string pubkey { get; set; }
+        }
+
+        private async void bootstrap () {
+            var sess = new Soup.Session ();
+            var msg = new Soup.Message ("GET", "https://build.tox.chat/job/nodefile_build_linux_x86_64_release/lastSuccessfulBuild/artifact/Nodefile.json");
+            var stream = yield sess.send_async (msg, null);
+            var json = new Json.Parser ();
+            if (yield json.load_from_stream_async (stream, null)) {
+                Server[] servers = {};
+                var array = json.get_root ().get_object ().get_array_member ("servers");
+                array.foreach_element ((arr, index, node) => {
+                    servers += Json.gobject_deserialize (typeof (Server), node) as Server;
+                });
+                while (!this.connected) {
+                    for (int i = 0; i < 4; ++i) { // bootstrap to 4 random nodes
+                        int index = Random.int_range (0, servers.length);
+                        print ("Bootstrapping to %s:%llu by %s\n", servers[index].ipv4, servers[index].port, servers[index].owner);
+                        this.handle.bootstrap (
+                            servers[index].ipv4,
+                            (uint16) servers[index].port,
+                            Tools.hex2bin (servers[index].pubkey),
+                            null
+                        );
+                    }
+
+                    // wait 5 seconds without blocking main loop
+                    Timeout.add (5000, () => {
+                        bootstrap.callback ();
+                        return Source.REMOVE;
+                    });
+                    yield;
+                }
+                print ("done bootstrapping\n");
+            }
         }
 
         /*
