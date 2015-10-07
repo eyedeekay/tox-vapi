@@ -1039,11 +1039,11 @@ namespace ToxCore {
         public void callback_friend_read_receipt (ReadReceiptFunc callback);
 
         [CCode (cname="tox_friend_request_cb", has_target=true, has_type_id=false)]
-        public delegate void FriendRequestFunc (Tox self, [CCode (array_length=false)] uint8[] public_key, uint8[] message);
+        public delegate void FriendRequestFunc (Tox self, [CCode (array_length=false)] uint8[] public_key, [CCode (array_length_type="size_t")] uint8[] message);
         public void callback_friend_request (FriendRequestFunc callback);
 
         [CCode (cname="tox_friend_message_cb", has_target=true, has_type_id=false)]
-        public delegate void FriendMessageFunc (Tox self, uint32 friend_number, MessageType type, uint8[] message);
+        public delegate void FriendMessageFunc (Tox self, uint32 friend_number, MessageType type, [CCode (array_length_type="size_t")] uint8[] message);
         public void callback_friend_message (FriendMessageFunc callback);
 
         [CCode (cname = "tox_file_recv_control_cb", has_target=true, has_type_id=false)]
@@ -1066,14 +1066,7 @@ namespace ToxCore {
         public delegate void ConnectionStatusFunc (Tox self, ConnectionStatus status);
         public void callback_self_connection_status (ConnectionStatusFunc callback);
 
-        // Properties.
-        /*public uint8 name {
-          [CCode (cname="tox_self_get_address"] get;
-          private set;
-        }*/
-
         // Methods.
-        [CCode (cname="tox_new")]
         public Tox (Options? options = null, out ERR_NEW? error = null);
 
         // Self methods.
