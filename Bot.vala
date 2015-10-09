@@ -21,11 +21,10 @@ namespace ToxVapi {
                 ToxCore.Version.PATCH
             );
 
-            var options = Options () {
-                ipv6_enabled = true,
-                udp_enabled = true,
-                proxy_type = ProxyType.NONE
-            };
+            var options = new Options (null);
+            options.ipv6_enabled = true;
+            options.udp_enabled = true;
+            options.proxy_type = ProxyType.NONE;
 
             // Load/Create the Tox_save.
             if (FileUtils.test (this.TOX_SAVE, FileTest.EXISTS)) {

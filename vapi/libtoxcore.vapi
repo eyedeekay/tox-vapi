@@ -922,8 +922,8 @@ namespace ToxCore {
      * tox_options_new to get a new default options object.
      */
     [CCode (cname="struct Tox_Options", destroy_function="", has_type_id=false)]
-    [SimpleType]
-    public struct Options {
+    [Compact]
+    public class Options {
         /**
         * The type of socket to create.
         *
@@ -1009,6 +1009,8 @@ namespace ToxCore {
         */
         [CCode (array_length_cname="savedata_length", array_length_type="size_t")]
         public uint8[] savedata_data;
+
+        public Options (out ERR_OPTIONS_NEW err);
     }
 
     [CCode (cname="Tox", free_function="tox_kill", cprefix="tox_", has_type_id=false)]
