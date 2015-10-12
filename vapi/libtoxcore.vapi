@@ -1079,12 +1079,17 @@ namespace ToxCore {
         public bool self_set_name (uint8[] name, out ERR_SET_INFO error);
         public size_t self_get_name_size ();
         public void self_get_name ([CCode (array_length = false)] uint8[] name);
-        public bool self_set_status_message (uint8[] status_message, out ERR_SET_INFO error);
-        public size_t self_get_status_message_size ();
-        public void self_get_status_message ([CCode (array_length=false)] uint8[] status_message);
         public bool self_set_typing (uint32 friend_number, bool is_typing, out ERR_FRIEND_DELETE error);
         public size_t self_get_friend_list_size ();
         public void self_get_friend_list ([CCode (array_length = false)] uint32[] friend_list);
+
+        public UserStatus status {
+            [CCode (cname="tox_self_get_status")] get;
+            [CCode (cname="tox_self_set_status")] set;
+        }
+        public bool self_set_status_message (uint8[] status_message, out ERR_SET_INFO error);
+        public size_t self_get_status_message_size ();
+        public void self_get_status_message ([CCode (array_length=false)] uint8[] status_message);
 
         public uint32 nospam {
             [CCode (cname="tox_self_get_nospam")] get;
