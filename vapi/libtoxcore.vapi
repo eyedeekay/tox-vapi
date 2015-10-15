@@ -1729,7 +1729,6 @@ namespace ToxCore {
          *   is NULL, this function has no effect.
          */
         public void get_savedata([CCode(array_length=false)] uint8[] data);
-        public int load([CCode(array_length_type="guint32")] uint8[] data);
 
         /**
          * Sends a "get nodes" request to the given bootstrap node with IP, port, and
