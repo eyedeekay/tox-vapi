@@ -1594,7 +1594,7 @@ namespace ToxCore {
          *
          * @return true if hash was not NULL.
          */
-        public bool hash ([CCode (array_length=false)] uint8[] hash, uint8[] data);
+        public static bool hash ([CCode (array_length=false)] uint8[] hash, uint8[] data);
 
         /**
          * Sends a file control command to a friend for a given file transfer.
