@@ -17,4 +17,6 @@ style:
 		--indent-namespaces \
 		--indent-switches \
 		--add-one-line-brackets \
-		vapi/libtoxcore.vapi Bot.vala
+		vapi/libtoxcore.vapi \
+		vapi/toxav.vapi \
+		Bot.vala

@@ -2,9 +2,9 @@ using ToxCore;
 
 namespace ToxVapi {
     public class Bot : Object {
-        private const string BOT_NAME = "ValaBot";
-        private const string BOT_MOOD = "A simple bot in Vala - https://github.com/ValaTox/client";
-        private const string GROUP_NAME = "Official ValaTox groupchat - https://github.com/ValaTox/client";
+        private const string BOT_NAME = "RicinBot";
+        private const string BOT_MOOD = "A simple bot in Vala - https://github.com/RicinApp/tox-vapi";
+        private const string GROUP_NAME = "Official Ricin's groupchat - https://github.com/RicinApp/Ricin";
         private string TOX_SAVE = "Bot.tox";
 
         private Tox handle;
@@ -21,10 +21,11 @@ namespace ToxVapi {
                 ToxCore.Version.PATCH
             );
 
-            var options = new Options (null);
-            options.ipv6_enabled = true;
-            options.udp_enabled = true;
-            options.proxy_type = ProxyType.NONE;
+            var options = Options () {
+                ipv6_enabled = true,
+                udp_enabled = true,
+                proxy_type = ProxyType.NONE
+            };
 
             // Load/Create the Tox_save.
             if (FileUtils.test (this.TOX_SAVE, FileTest.EXISTS)) {
@@ -106,7 +107,7 @@ namespace ToxVapi {
                     });
                     yield;
                 }
-                print ("done bootstrapping\n");
+                print ("Done bootstrapping\n");
             }
         }
 
@@ -124,14 +125,54 @@ namespace ToxVapi {
             this.handle.friend_get_name (friend_number, result, null);
             print ("%s: %s\n", (string) result, message_string);
 
-            switch (message_string) {
+            if (message_string.has_prefix ("add ")) {
+                var tox_id = message_string.splice (0, 4);
+                var _message = "Add me plz ?";
+                print ("Sending a friend request to %s: \"%s\"\n", tox_id, _message);
+                uint32 friend_num = this.handle.friend_add (Tools.hex2bin (tox_id), _message.data, null);
+                print ("friend_num == %u\n", friend_num);
+                return;
+            }
+
+            switch (message_string.down ()) {
+                case "help":
+                    var response_message = "Available commands:\n";
+                    response_message += "about - Print informations about the bot.\n";
+                    response_message += "delfr - Make the bot delete you from it friend-list.\n";
+                    response_message += "save  - Save the .tox profile of the bot. [DEBUG ONLY]\n";
+                    response_message += "version - Display the bot version.";
+
+                    this.handle.friend_send_message (friend_number, MessageType.ACTION, response_message.data, null);
+                    break;
+                case "id":
+                    uint8[] toxid = new uint8[ADDRESS_SIZE];
+                    this.handle.self_get_address (toxid);
+                    var response_message = "My ToxID: " + Tools.bin2hex (toxid);
+                    this.handle.friend_send_message (friend_number, MessageType.NORMAL, response_message.data, null);
+                    break;
+                case "about":
+                    var response_message = "Heya %s! I'm a simple bot developped while coding the libtoxcore.vapi file. I was wrote by Benwaffle and SkyzohKey, my two cheers master! Anyway, I don't yet supports groupchats so don't invite me in ; I wont respond. :x".printf ((string) result);
+                    this.handle.friend_send_message (friend_number, MessageType.NORMAL, response_message.data, null);
+                    break;
                 case "save":
-                    this.handle.friend_send_message (friend_number, MessageType.NORMAL, "saving .tox file".data, null);
+                    this.handle.friend_send_message (friend_number, MessageType.ACTION, "is saving it .tox file.".data, null);
                     this.save_data ();
                     break;
+                case "delfr":
+                    this.handle.friend_send_message (friend_number, MessageType.ACTION, "deleted you. Don't forget to delete it too.".data, null);
+                    this.handle.friend_delete (friend_number, null);
+                    break;
+                case "version":
+                    var response_message = "Current version: d02cffe163";
+                    this.handle.friend_send_message (friend_number, MessageType.NORMAL, response_message.data, null);
+                    break;
                 case "quit":
-                    this.handle.friend_send_message (friend_number, MessageType.NORMAL, "quitting".data, null);
+                    this.handle.friend_send_message (friend_number, MessageType.ACTION, "will now quit Tox network.".data, null);
                     loop.quit ();
+                    break;
+                default:
+                    var response_message = "Unknown command. Please type `help` to get started. ^-^";
+                    this.handle.friend_send_message (friend_number, MessageType.NORMAL, response_message.data, null);
                     break;
             }
         }
@@ -139,7 +180,11 @@ namespace ToxVapi {
         public void on_friend_request (Tox handle, uint8[] public_key, uint8[] message) {
             public_key.length = PUBLIC_KEY_SIZE; // Fix an issue with Vala.
             var pkey = Tools.bin2hex (public_key);
-            print ("Received a friend request from %s.\n", pkey);
+            var message_string = (string) message;
+
+            print ("Received a friend request from:\n");
+            print ("--- %s\n", pkey);
+            print ("--- %s\n", message_string);
             this.handle.friend_add_norequest (public_key, null);
 
             // Save the friend in the .tox file.
@@ -170,7 +215,7 @@ namespace ToxVapi {
         }
 
         public bool save_data () {
-            info ("saving data to " + this.TOX_SAVE);
+            info ("Saving data to " + this.TOX_SAVE);
             uint32 size = this.handle.get_savedata_size ();
             uint8[] buffer = new uint8[size];
             this.handle.get_savedata (buffer);
