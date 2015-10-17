@@ -7,5 +7,6 @@ https://wiki.gnome.org/action/show/Projects/Vala/LegacyBindings
 
 TODO:
 - [x] toxcore
-- [ ] toxav
+- [x] toxav
 - [ ] toxdns
+- [ ] toxencryptsave
