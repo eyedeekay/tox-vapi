@@ -9,4 +9,4 @@ TODO:
 - [x] toxcore
 - [x] toxav
 - [ ] toxdns
-- [ ] toxencryptsave
+- [x] toxencryptsave
