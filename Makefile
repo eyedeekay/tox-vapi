@@ -8,8 +8,6 @@ bot:
 		--pkg=libtoxav \
 		--target-glib=2.32 \
 		-g \
-		-X -I../../toxcore-new-toxav \
-		-X -L../../toxcore-new-toxav/build/.libs \
 		Bot.vala
 	gdb -ex run ./Bot
 
