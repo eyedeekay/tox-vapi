@@ -208,7 +208,7 @@ namespace ToxCore {
         UDP
     }
 
-    [CCode (cname="TOX_FILE_KIND", cprefix="TOX_FILE_KIND_", has_type_id=false)]
+    [CCode (cname="enum TOX_FILE_KIND", cprefix="TOX_FILE_KIND_", has_type_id=false)]
     public enum FileKind {
         /**
          * Arbitrary file data. Clients can choose to handle it based on the file name
@@ -1157,7 +1157,7 @@ namespace ToxCore {
          * @param filename_length Size in bytes of the filename.
          */
         [CCode (cname = "tox_file_recv_cb", has_target=true, has_type_id=false)]
-        public delegate void FileRecvFunc (Tox self, uint32 friend_number, uint32 file_number, FileKind kind, uint64 file_size, uint8[] filename);
+        public delegate void FileRecvFunc (Tox self, uint32 friend_number, uint32 file_number, FileKind kind, uint64 file_size, [CCode (array_length_type="size_t")] uint8[] filename);
 
         /**
          * Set the callback for the `file_recv` event. Pass NULL to unset.
