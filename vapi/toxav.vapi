@@ -351,12 +351,12 @@ namespace ToxAV {
         /**
          * Start new A/V session. There can only be only one session per Tox instance.
          */
-        public ToxAV (Tox tox, out ERR_NEW? error = null);
+        public ToxAV (ToxCore.Tox tox, out ERR_NEW? error = null);
 
         /**
          * Returns the Tox instance the A/V object was created for.
          */
-        public Tox get_tox (ToxAV tox_av);
+        public ToxCore.Tox get_tox (ToxAV tox_av);
 
         /**
          * Returns the interval in milliseconds when the next toxav_iterate call should
