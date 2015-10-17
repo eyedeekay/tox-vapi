@@ -8,7 +8,7 @@ namespace ToxVapi {
         private string TOX_SAVE = "Bot.tox";
 
         private Tox handle;
-        private ToxAV.ToxAV av;
+        /*private ToxAV.ToxAV av;*/
 
         private bool connected = false;
 
@@ -17,8 +17,8 @@ namespace ToxVapi {
         public Bot () {
             print ("Running Toxcore version %u.%u.%u\n",
                 ToxCore.Version.MAJOR, ToxCore.Version.MINOR, ToxCore.Version.PATCH);
-            print ("Running ToxAV version %u.%u.%u\n",
-                ToxAV.Version.MAJOR, ToxAV.Version.MINOR, ToxAV.Version.PATCH);
+            /*print ("Running ToxAV version %u.%u.%u\n",
+                ToxAV.Version.MAJOR, ToxAV.Version.MINOR, ToxAV.Version.PATCH);*/
 
             var options = new Options (null);
             options.ipv6_enabled = true;
@@ -32,8 +32,8 @@ namespace ToxVapi {
             }
 
             this.handle = new Tox (options, null);
-            ToxAV.ERR_NEW err;
-            this.av = new ToxAV.ToxAV (this.handle, out err);
+            /*ToxAV.ERR_NEW err;
+            this.av = new ToxAV.ToxAV (this.handle, out err);*/
 
             this.bootstrap.begin ();
 
@@ -68,10 +68,11 @@ namespace ToxVapi {
         }
 
         void tox_loop () {
-          var interval = uint32.min (handle.iteration_interval (), av.iteration_interval ());
+          /*var interval = uint32.min (handle.iteration_interval (), av.iteration_interval ());*/
+          var interval = this.handle.iteration_interval ();
           Timeout.add (interval, () => {
             this.handle.iterate ();
-            this.av.iterate ();
+            /*this.av.iterate ();*/
             this.tox_loop ();
             return Source.REMOVE;
           });
@@ -119,14 +120,6 @@ namespace ToxVapi {
                 print ("Done bootstrapping\n");
             }
         }
-
-        /*
-        // Adding a friend
-        var friend_toxid = Tools.hex2bin ("TOX ID HERE");
-        var message = "Add me plz ?";
-        stdout.printf("Sending a friend request to %s: \"%s\"\n", Tools.bin2hex (friend_toxid), message);
-        this.handle.friend_add (friend_toxid, Tools.hex2bin (message), null);
-        */
 
         public void on_friend_message (Tox handle, uint32 friend_number, MessageType type, uint8[] message) {
             string message_string = (string) message;
