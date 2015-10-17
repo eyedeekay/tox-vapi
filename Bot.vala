@@ -8,18 +8,17 @@ namespace ToxVapi {
         private string TOX_SAVE = "Bot.tox";
 
         private Tox handle;
+        private ToxAV.ToxAV av;
 
         private bool connected = false;
 
         private MainLoop loop = new MainLoop ();
 
         public Bot () {
-            print (
-                "Running Toxcore version %u.%u.%u\n",
-                ToxCore.Version.MAJOR,
-                ToxCore.Version.MINOR,
-                ToxCore.Version.PATCH
-            );
+            print ("Running Toxcore version %u.%u.%u\n",
+                ToxCore.Version.MAJOR, ToxCore.Version.MINOR, ToxCore.Version.PATCH);
+            print ("Running ToxAV version %u.%u.%u\n",
+                ToxAV.Version.MAJOR, ToxAV.Version.MINOR, ToxAV.Version.PATCH);
 
             var options = new Options (null);
             options.ipv6_enabled = true;
@@ -33,6 +32,9 @@ namespace ToxVapi {
             }
 
             this.handle = new Tox (options, null);
+            ToxAV.ERR_NEW err;
+            this.av = new ToxAV.ToxAV (this.handle, out err);
+
             this.bootstrap.begin ();
 
             this.handle.self_set_name (this.BOT_NAME.data, null);
@@ -66,8 +68,10 @@ namespace ToxVapi {
         }
 
         void tox_loop () {
-          Timeout.add (this.handle.iteration_interval (), () => {
+          var interval = uint32.min (handle.iteration_interval (), av.iteration_interval ());
+          Timeout.add (interval, () => {
             this.handle.iterate ();
+            this.av.iterate ();
             this.tox_loop ();
             return Source.REMOVE;
           });
@@ -156,7 +160,7 @@ namespace ToxVapi {
                     this.handle.friend_send_message (friend_number, MessageType.NORMAL, response_message.data, null);
                     break;
                 case "about":
-                    var response_message = "Heya %s! I'm a simple bot developped while coding the libtoxcore.vapi file. I was wrote by Benwaffle and SkyzohKey, my two cheers master! Anyway, I don't yet supports groupchats so don't invite me in ; I wont respond. :x".printf ((string) result);
+                    var response_message = "Hi %s! I'm a simple bot developed to test Vala bindings to Tox. (I don't support groupchats)".printf ((string) result);
                     this.handle.friend_send_message (friend_number, MessageType.NORMAL, response_message.data, null);
                     break;
                 case "save":
