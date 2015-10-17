@@ -34,10 +34,6 @@ namespace ToxVapi {
 
             this.handle = new Tox (options, null);
             this.bootstrap.begin ();
-            Timeout.add (handle.iteration_interval (), () => {
-                handle.iterate ();
-                return Source.CONTINUE;
-            });
 
             this.handle.self_set_name (this.BOT_NAME.data, null);
             this.handle.self_set_status_message (this.BOT_MOOD.data, null);
@@ -64,7 +60,17 @@ namespace ToxVapi {
             this.handle.callback_friend_request (this.on_friend_request);
             this.handle.callback_friend_status (this.on_friend_status);
 
+            tox_loop ();
+
             loop.run ();
+        }
+
+        void tox_loop () {
+          Timeout.add (this.handle.iteration_interval (), () => {
+            this.handle.iterate ();
+            this.tox_loop ();
+            return Source.REMOVE;
+          });
         }
 
         class Server : Object {
