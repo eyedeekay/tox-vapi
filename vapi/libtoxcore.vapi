@@ -1693,7 +1693,7 @@ namespace ToxCore {
          *   On failure, this function returns UINT32_MAX. Any pattern in file numbers
          *   should not be relied on.
          */
-        public uint32 file_send (uint32 friend_number, FileKind kind, uint64 file_size, [CCode (array_length=false)] uint8[]? file_id, uint8[] filename, out ERR_FILE_SEND error);
+        public uint32 file_send (uint32 friend_number, FileKind kind, uint64 file_size, [CCode (array_length=false)] uint8[]? file_id, uint8[]? filename, out ERR_FILE_SEND error);
 
         /**
          * Send a chunk of file data to a friend.
