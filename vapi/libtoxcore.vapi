@@ -1837,7 +1837,7 @@ namespace ToxCore {
          *
          * @return true on success.
          */
-        public bool friend_send_lossy_packet (uint32 friend_number, [CCode (array_length = false)] uint8[] data, out ERR_FRIEND_CUSTOM_PACKET error);
+        public bool friend_send_lossy_packet (uint32 friend_number, uint8[] data, out ERR_FRIEND_CUSTOM_PACKET error);
 
         /**
          * Send a custom lossless packet to a friend.
@@ -1855,7 +1855,7 @@ namespace ToxCore {
          *
          * @return true on success.
          */
-        public bool friend_send_lossless_packet (uint32 friend_number, [CCode (array_length = false)] uint8[] data, out ERR_FRIEND_CUSTOM_PACKET error);
+        public bool friend_send_lossless_packet (uint32 friend_number, uint8[] data, out ERR_FRIEND_CUSTOM_PACKET error);
 
         /**
          * @param friend_number The friend number of the friend who sent a lossy packet.
@@ -1863,7 +1863,7 @@ namespace ToxCore {
          * @param length The length of the packet data byte array.
          */
         [CCode (cname = "tox_file_recv_control_cb", has_target=true, has_type_id=false)]
-        public delegate void FriendLossyPacketFunc (Tox self, uint32 friend_number, [CCode (array_length = false)] uint8[] data);
+        public delegate void FriendLossyPacketFunc (Tox self, uint32 friend_number, uint8[] data);
 
         /**
          * Set the callback for the `friend_lossy_packet` event. Pass NULL to unset.
@@ -1876,7 +1876,7 @@ namespace ToxCore {
          * @param length The length of the packet data byte array.
          */
         [CCode (cname = "tox_file_recv_control_cb", has_target=true, has_type_id=false)]
-        public delegate void FriendLosslessPacketFunc (Tox self, uint32 friend_number, [CCode (array_length = false)] uint8[] data);
+        public delegate void FriendLosslessPacketFunc (Tox self, uint32 friend_number, uint8[] data);
 
 
         /**
