@@ -1837,7 +1837,7 @@ namespace ToxCore {
          *
          * @return true on success.
          */
-        public bool friend_send_lossy_packet (uint32 friend_number, uint8[] data, out ERR_FRIEND_CUSTOM_PACKET error);
+        public bool friend_send_lossy_packet (uint32 friend_number, uint8[] data, out ERR_FRIEND_CUSTOM_PACKET? error);
 
         /**
          * Send a custom lossless packet to a friend.
@@ -1855,7 +1855,7 @@ namespace ToxCore {
          *
          * @return true on success.
          */
-        public bool friend_send_lossless_packet (uint32 friend_number, uint8[] data, out ERR_FRIEND_CUSTOM_PACKET error);
+        public bool friend_send_lossless_packet (uint32 friend_number, uint8[] data, out ERR_FRIEND_CUSTOM_PACKET? error);
 
         /**
          * @param friend_number The friend number of the friend who sent a lossy packet.
