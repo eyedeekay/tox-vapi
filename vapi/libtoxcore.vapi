@@ -806,6 +806,50 @@ namespace ToxCore {
         NOT_BOUND
     }
 
+    [CCode (cname="TOX_ERR_FRIEND_CUSTOM_PACKET", cprefix="TOX_ERR_FRIEND_CUSTOM_PACKET_")]
+    public enum ERR_FRIEND_CUSTOM_PACKET {
+      /**
+       * The function returned successfully.
+       */
+      OK,
+
+      /**
+       * One of the arguments to the function was NULL when it was not expected.
+       */
+      NULL,
+
+      /**
+       * The friend number did not designate a valid friend.
+       */
+      FRIEND_NOT_FOUND,
+
+      /**
+       * This client is currently not connected to the friend.
+       */
+      FRIEND_NOT_CONNECTED,
+
+      /**
+       * The first byte of data was not in the specified range for the packet type.
+       * This range is 200-254 for lossy, and 160-191 for lossless packets.
+       */
+      INVALID,
+
+      /**
+       * Attempted to send an empty packet.
+       */
+      EMPTY,
+
+      /**
+       * Packet data length exceeded TOX_MAX_CUSTOM_PACKET_SIZE.
+       */
+      TOO_LONG,
+
+      /**
+       * Packet queue is full.
+       */
+      SENDQ
+    }
+
     /**
     * This struct contains all the startup options for Tox. You can either allocate
     * this object yourself, and pass it to tox_options_default, or call
@@ -1772,5 +1816,72 @@ namespace ToxCore {
          * milliseconds.
          */
         public void iterate ();
+
+        /**
+         * Send a custom lossy packet to a friend.
+         *
+         * The first byte of data must be in the range 200-254. Maximum length of a
+         * custom packet is TOX_MAX_CUSTOM_PACKET_SIZE.
+         *
+         * Lossy packets behave like UDP packets, meaning they might never reach the
+         * other side or might arrive more than once (if someone is messing with the
+         * connection) or might arrive in the wrong order.
+         *
+         * Unless latency is an issue, it is recommended that you use lossless custom
+         * packets instead.
+         *
+         * @param friend_number The friend number of the friend this lossy packet
+         *   should be sent to.
+         * @param data A byte array containing the packet data.
+         * @param length The length of the packet data byte array.
+         *
+         * @return true on success.
+         */
+        public bool friend_send_lossy_packet (uint32 friend_number, [CCode (array_length = false)] uint8[] data, out ERR_FRIEND_CUSTOM_PACKET error);
+
+        /**
+         * Send a custom lossless packet to a friend.
+         *
+         * The first byte of data must be in the range 160-191. Maximum length of a
+         * custom packet is TOX_MAX_CUSTOM_PACKET_SIZE.
+         *
+         * Lossless packet behaviour is comparable to TCP (reliability, arrive in order)
+         * but with packets instead of a stream.
+         *
+         * @param friend_number The friend number of the friend this lossless packet
+         *   should be sent to.
+         * @param data A byte array containing the packet data.
+         * @param length The length of the packet data byte array.
+         *
+         * @return true on success.
+         */
+        public bool friend_send_lossless_packet (uint32 friend_number, [CCode (array_length = false)] uint8[] data, out ERR_FRIEND_CUSTOM_PACKET error);
+
+        /**
+         * @param friend_number The friend number of the friend who sent a lossy packet.
+         * @param data A byte array containing the received packet data.
+         * @param length The length of the packet data byte array.
+         */
+        [CCode (cname = "tox_file_recv_control_cb", has_target=true, has_type_id=false)]
+        public delegate void FriendLossyPacketFunc (Tox self, uint32 friend_number, [CCode (array_length = false)] uint8[] data);
+
+        /**
+         * Set the callback for the `friend_lossy_packet` event. Pass NULL to unset.
+         */
+        public void callback_friend_lossy_packet (FriendLossyPacketFunc callback);
+
+        /**
+         * @param friend_number The friend number of the friend who sent the packet.
+         * @param data A byte array containing the received packet data.
+         * @param length The length of the packet data byte array.
+         */
+        [CCode (cname = "tox_file_recv_control_cb", has_target=true, has_type_id=false)]
+        public delegate void FriendLosslessPacketFunc (Tox self, uint32 friend_number, [CCode (array_length = false)] uint8[] data);
+
+
+        /**
+         * Set the callback for the `friend_lossless_packet` event. Pass NULL to unset.
+         */
+        public void callback_friend_lossless_packet (FriendLosslessPacketFunc callback);
     }
 }
