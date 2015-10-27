@@ -67,17 +67,26 @@ namespace ToxVapi {
             this.group_number = this.handle.add_groupchat ();
             this.handle.group_set_title (this.group_number, "Ricin groupchat".data);
 
-            /**
-            * FIXME: This doesn't work.
-            */
             this.handle.callback_group_message ((self, group_number, peer_number, message) => {
-              string message_string = Tools.bin2hex (message);
+              if (this.handle.group_peernumber_is_ours (group_number, peer_number) == 1) {
+                return;
+              }
+
+              string message_string = Tools.arr2str (message);
               debug (@"$peer_number: $message_string");
+            });
+
+            this.handle.callback_group_action ((self, group_number, peer_number, action) => {
+              string action_string = Tools.arr2str (action);
+              debug (@"* $peer_number $action_string");
+            });
+
+            this.handle.callback_group_title ((self, group_number, peer_number, title) => {
+              this.handle.group_message_send (group_number, @"$peer_number changed topic to $(Tools.arr2str(title))".data);
             });
             // TEMP DEV ZONE
 
             tox_loop ();
-
             loop.run ();
         }
 

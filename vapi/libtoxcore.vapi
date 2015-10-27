@@ -808,46 +808,46 @@ namespace ToxCore {
 
     [CCode (cname="TOX_ERR_FRIEND_CUSTOM_PACKET", cprefix="TOX_ERR_FRIEND_CUSTOM_PACKET_")]
     public enum ERR_FRIEND_CUSTOM_PACKET {
-      /**
-       * The function returned successfully.
-       */
-      OK,
+        /**
+         * The function returned successfully.
+         */
+        OK,
 
-      /**
-       * One of the arguments to the function was NULL when it was not expected.
-       */
-      NULL,
+        /**
+         * One of the arguments to the function was NULL when it was not expected.
+         */
+        NULL,
 
-      /**
-       * The friend number did not designate a valid friend.
-       */
-      FRIEND_NOT_FOUND,
+        /**
+         * The friend number did not designate a valid friend.
+         */
+        FRIEND_NOT_FOUND,
 
-      /**
-       * This client is currently not connected to the friend.
-       */
-      FRIEND_NOT_CONNECTED,
+        /**
+         * This client is currently not connected to the friend.
+         */
+        FRIEND_NOT_CONNECTED,
 
-      /**
-       * The first byte of data was not in the specified range for the packet type.
-       * This range is 200-254 for lossy, and 160-191 for lossless packets.
-       */
-      INVALID,
+        /**
+         * The first byte of data was not in the specified range for the packet type.
+         * This range is 200-254 for lossy, and 160-191 for lossless packets.
+         */
+        INVALID,
 
-      /**
-       * Attempted to send an empty packet.
-       */
-      EMPTY,
+        /**
+         * Attempted to send an empty packet.
+         */
+        EMPTY,
 
-      /**
-       * Packet data length exceeded TOX_MAX_CUSTOM_PACKET_SIZE.
-       */
-      TOO_LONG,
+        /**
+         * Packet data length exceeded TOX_MAX_CUSTOM_PACKET_SIZE.
+         */
+        TOO_LONG,
 
-      /**
-       * Packet queue is full.
-       */
-      SENDQ
+        /**
+         * Packet queue is full.
+         */
+        SENDQ
     }
 
     /**
@@ -1907,7 +1907,7 @@ namespace ToxCore {
          *  Function(Tox *tox, int groupnumber, int peernumber, const uint8_t * message, uint16_t length, void *userdata)
          */
         [CCode (cname = "tox_wrapper_group_message_cb", has_target=true, has_type_id=false)]
-        public delegate void GroupMessageFunc (Tox self, int group_number, int peer_number, uint8[] message);
+        public delegate void GroupMessageFunc (Tox self, int group_number, int peer_number, [CCode (array_length_type="uint16_t")] uint8[] message);
 
         public void callback_group_message (GroupMessageFunc callback);
 
@@ -1916,7 +1916,7 @@ namespace ToxCore {
          *  Function(Tox *tox, int groupnumber, int peernumber, const uint8_t * action, uint16_t length, void *userdata)
          */
         [CCode (cname = "tox_wrapper_group_action_cb", has_target=true, has_type_id=false)]
-        public delegate void GroupActionFunc (Tox self, int group_number, int peer_number, uint8[] action);
+        public delegate void GroupActionFunc (Tox self, int group_number, int peer_number, [CCode (array_length_type="uint16_t")] uint8[] action);
 
         public void callback_group_action (GroupActionFunc callback);
 
@@ -1936,9 +1936,9 @@ namespace ToxCore {
          *  Function(Tox *tox, int groupnumber, int peernumber, TOX_CHAT_CHANGE change, void *userdata)
          */
         public enum CHAT_CHANGE_PEER {
-          ADD,
-          DEL,
-          NAME
+            ADD,
+            DEL,
+            NAME
         }
 
         [CCode (cname = "tox_wrapper_group_namelist_change_cb", has_target=true, has_type_id=false)]

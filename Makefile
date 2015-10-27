@@ -9,6 +9,9 @@ bot:
 		--target-glib=2.32 \
 		-g \
 		Bot.vala
+		G_MESSAGES_DEBUG=all ./Bot
+
+debug: bot
 	gdb -ex run ./Bot
 
 style:
