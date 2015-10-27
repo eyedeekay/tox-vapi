@@ -11,6 +11,7 @@ namespace ToxVapi {
         /*private ToxAV.ToxAV av;*/
 
         private bool connected = false;
+        private int group_number;
 
         private MainLoop loop = new MainLoop ();
 
@@ -61,6 +62,19 @@ namespace ToxVapi {
             this.handle.callback_friend_message (this.on_friend_message);
             this.handle.callback_friend_request (this.on_friend_request);
             this.handle.callback_friend_status (this.on_friend_status);
+
+            // TEMP DEV ZONE
+            this.group_number = this.handle.add_groupchat ();
+            this.handle.group_set_title (this.group_number, "Ricin groupchat".data);
+
+            /**
+            * FIXME: This doesn't work.
+            */
+            this.handle.callback_group_message ((self, group_number, peer_number, message) => {
+              string message_string = Tools.bin2hex (message);
+              debug (@"$peer_number: $message_string");
+            });
+            // TEMP DEV ZONE
 
             tox_loop ();
 
@@ -137,6 +151,9 @@ namespace ToxVapi {
             }
 
             switch (message_string.down ()) {
+                case "invite":
+                    this.handle.invite_friend ((int32) friend_number, this.group_number);
+                    break;
                 case "help":
                     var response_message = "Available commands:\n";
                     response_message += "about - Print informations about the bot.\n";
