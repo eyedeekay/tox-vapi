@@ -1878,157 +1878,160 @@ namespace ToxCore {
         [CCode (cname = "tox_file_recv_control_cb", has_target=true, has_type_id=false)]
         public delegate void FriendLosslessPacketFunc (Tox self, uint32 friend_number, uint8[] data);
 
-        /************************************
-        **  Groupchats section
-        **  May not work in the current file
-        ************************************/
-
-
         /**
          * Set the callback for the `friend_lossless_packet` event. Pass NULL to unset.
          */
         public void callback_friend_lossless_packet (FriendLosslessPacketFunc callback);
 
-        /* Set the callback for group invites.
-         *
-         *  Function(Tox *tox, int32_t friendnumber, uint8_t type, const uint8_t *data, uint16_t length, void *userdata)
-         *
-         * data of length is what needs to be passed to join_groupchat().
-         *
-         * for what type means see the enum right above this comment.
-         */
-        [CCode (cname = "tox_wrapper_group_invite_cb", has_target=true, has_type_id=false)]
+        /************************************
+        **  Groupchats
+        ************************************/
+
+         /**
+          * The callback for group invites
+          *
+          * data of length is what needs to be passed to join_groupchat().
+          *
+          * for what type means see ToxGroupChatType_
+          */
         public delegate void GroupInviteFunc (Tox self, uint32 friend_number, uint8[] type, uint8[] data);
 
+        /**
+         * Set the callback for group invites.
+         */
         public void callback_group_invite (GroupInviteFunc callback);
 
-        /* Set the callback for group messages.
-         *
-         *  Function(Tox *tox, int groupnumber, int peernumber, const uint8_t * message, uint16_t length, void *userdata)
-         */
-        [CCode (cname = "tox_wrapper_group_message_cb", has_target=true, has_type_id=false)]
         public delegate void GroupMessageFunc (Tox self, int group_number, int peer_number, [CCode (array_length_type="uint16_t")] uint8[] message);
 
+        /**
+         * Set the callback for group messages.
+         */
         public void callback_group_message (GroupMessageFunc callback);
 
-        /* Set the callback for group actions.
-         *
-         *  Function(Tox *tox, int groupnumber, int peernumber, const uint8_t * action, uint16_t length, void *userdata)
+        /**
+         * The callback for group actions
          */
-        [CCode (cname = "tox_wrapper_group_action_cb", has_target=true, has_type_id=false)]
         public delegate void GroupActionFunc (Tox self, int group_number, int peer_number, [CCode (array_length_type="uint16_t")] uint8[] action);
 
+        /**
+         * Set the callback for group actions.
+         */
         public void callback_group_action (GroupActionFunc callback);
 
-        /* Set callback function for title changes.
+        /**
+         * The callback for title changes
          *
-         * Function(Tox *tox, int groupnumber, int peernumber, uint8_t * title, uint8_t length, void *userdata)
          * if peernumber == -1, then author is unknown (e.g. initial joining the group)
          */
-        [CCode (cname = "tox_wrapper_group_title_cb", has_target=true, has_type_id=false)]
         public delegate void GroupTitleFunc (Tox self, int group_number, int peer_number, uint8[] title);
 
+        /**
+         * Set callback function for title changes.
+         */
         public void callback_group_title (GroupTitleFunc callback);
 
-        /* Set callback function for peer name list changes.
-         *
-         * It gets called every time the name list changes(new peer/name, deleted peer)
-         *  Function(Tox *tox, int groupnumber, int peernumber, TOX_CHAT_CHANGE change, void *userdata)
-         */
         public enum CHAT_CHANGE_PEER {
             ADD,
             DEL,
             NAME
         }
 
-        [CCode (cname = "tox_wrapper_group_namelist_change_cb", has_target=true, has_type_id=false)]
+        /**
+         * The callback for peer name list changes
+         */
         public delegate void GroupNamelistChangeFunc (Tox self, int group_number, int peer_number, CHAT_CHANGE_PEER change_type);
 
+        /**
+         * Set callback function for peer name list changes.
+         *
+         * It gets called every time the name list changes(new peer/name, deleted peer)
+         */
         public void callback_group_namelist_change (GroupNamelistChangeFunc callback);
 
-        /* Creates a new groupchat and puts it in the chats array.
+        /**
+         * Creates a new groupchat and puts it in the chats array.
          *
-         * return group number on success.
-         * return -1 on failure.
+         * @return group number on success, -1 on failure.
          */
         public int add_groupchat ();
 
-        /* Delete a groupchat from the chats array.
+        /**
+         * Delete a groupchat from the chats array.
          *
-         * return 0 on success.
-         * return -1 if failure.
+         * @return 0 on success, -1 on failure.
          */
         public int del_groupchat (int group_number);
 
-        /* Copy the name of peernumber who is in groupnumber to name.
+        /**
+         * Copy the name of peernumber who is in groupnumber to name.
          * name must be at least TOX_MAX_NAME_LENGTH long.
          *
-         * return length of name if success
-         * return -1 if failure
+         * @return length of name on success, -1 on failure
          */
         public int group_peername (int group_number, int peer_number, [CCode (array_length=false)] out uint8[] name);
 
-        /* Copy the public key of peernumber who is in groupnumber to public_key.
+        /**
+         * Copy the public key of peernumber who is in groupnumber to public_key.
          * public_key must be TOX_PUBLIC_KEY_SIZE long.
          *
-         * returns 0 on success
-         * returns -1 on failure
+         * @return 0 on success, -1 on failure
          */
         public int group_peer_pubkey (int group_number, int peer_number, [CCode (array_length=false)] out uint8[] public_key);
 
-        /* invite friendnumber to groupnumber
-         * return 0 on success
-         * return -1 on failure
+        /**
+         * invite friendnumber to groupnumber
+         * @return 0 on success, -1 on failure
          */
         public int invite_friend (int32 friend_number, int group_number);
 
-        /* Join a group (you need to have been invited first.) using data of length obtained
+        /**
+         * Join a group (you need to have been invited first.) using data of length obtained
          * in the group invite callback.
          *
-         * returns group number on success
-         * returns -1 on failure.
+         * @return group number on success, -1 on failure.
          */
         public int join_groupchat (int32 friend_number, uint8[] data);
 
-        /* send a group message
-         * return 0 on success
-         * return -1 on failure
+        /**
+         * send a group message
+         * @return 0 on success, -1 on failure
          */
         public int group_message_send (int group_number, uint8[] message);
 
-        /* send a group action
-         * return 0 on success
-         * return -1 on failure
+        /**
+         * send a group action
+         * @return 0 on success, -1 on failure
          */
         public int group_action_send (int group_number, uint8[] action);
 
-        /* set the group's title, limited to MAX_NAME_LENGTH
-         * return 0 on success
-         * return -1 on failure
+        /**
+         * set the group's title, limited to MAX_NAME_LENGTH
+         * @return 0 on success, -1 on failure
          */
         public int group_set_title (int group_number, uint8[] title);
 
-        /* Get group title from groupnumber and put it in title.
+        /**
+         * Get group title from groupnumber and put it in title.
          * title needs to be a valid memory location with a max_length size of at least MAX_NAME_LENGTH (128) bytes.
          *
-         *  return length of copied title if success.
-         *  return -1 if failure.
+         * @return length of copied title on success, -1 on failure.
          */
         public int group_get_title (int group_number, [CCode (array_length=false)] out uint8[] title, uint32 max_length);
 
-        /* Check if the current peernumber corresponds to ours.
+        /**
+         * Check if the current peernumber corresponds to ours.
          *
-         * return 1 if the peernumber corresponds to ours.
-         * return 0 on failure.
+         * @return 1 if the peernumber corresponds to ours, 0 on failure.
          */
         public int group_peernumber_is_ours (int group_number, int peer_number);
 
-        /* Return the number of peers in the group chat on success.
-         * return -1 on failure
+        /**
+         * @return the number of peers in the group chat on success, -1 on failure
          */
         public int group_number_peers (int group_number);
 
-        /* List all the peers in the group chat.
+        /**
+         * List all the peers in the group chat.
          *
          * Copies the names of the peers to the name[length][TOX_MAX_NAME_LENGTH] array.
          *
@@ -2036,20 +2039,22 @@ namespace ToxCore {
          *
          * returns the number of peers on success.
          *
-         * return -1 on failure.
+         * @return -1 on failure.
          */
         /**
          *  TODO: Fix this. (tox_old.h:152)
          *  public int group_get_names (int group_number, uint8[])
          */
 
-        /* Return the number of chats in the instance m.
+        /**
+         * Return the number of chats in the instance m.
          * You should use this to determine how much memory to allocate
          * for copy_chatlist.
          */
         public uint32 count_chatlist ();
 
-        /* Copy a list of valid chat IDs into the array out_list.
+        /**
+         * Copy a list of valid chat IDs into the array out_list.
          * If out_list is NULL, returns 0.
          * Otherwise, returns the number of elements copied.
          * If the array was too small, the contents
@@ -2057,10 +2062,10 @@ namespace ToxCore {
          */
         public uint32 get_chatlist (out int32[] out_list);
 
-        /* return the type of groupchat (TOX_GROUPCHAT_TYPE_) that groupnumber is.
+        /**
+         * return the type of groupchat (TOX_GROUPCHAT_TYPE_) that groupnumber is.
          *
-         * return -1 on failure.
-         * return type on success.
+         * @return -1 on failure, type on success.
          */
         public int group_get_type (int group_number);
     }
