@@ -23,3 +23,34 @@ style:
 		vapi/libtoxcore.vapi \
 		vapi/toxav.vapi \
 		Bot.vala
+
+install: 
+	cp -v \
+		vapi/libtoxav.deps \
+		vapi/libtoxcore.vapi \
+		vapi/toxencryptsave.vapi \
+		vapi/libtoxav.vapi \
+		vapi/toxencryptsave.deps \
+		/usr/share/vala/vapi
+        cp -v \
+                vapi/libtoxav.deps \
+                vapi/libtoxcore.vapi \
+                vapi/toxencryptsave.vapi \
+                vapi/libtoxav.vapi \
+                vapi/toxencryptsave.deps \
+                /usr/share/vala-0.34/vapi
+        cp -v \
+                vapi/libtoxav.deps \
+                vapi/libtoxcore.vapi \
+                vapi/toxencryptsave.vapi \
+                vapi/libtoxav.vapi \
+                vapi/toxencryptsave.deps \
+                /usr/share/vala-0.26/vapi
+
+deb-pkg:
+	make
+	checkinstall --install=no \
+	--default \
+	--pkgname=tox-vapi \
+	--pkgversion=0.9 \
+	--pakdir=../
