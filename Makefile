@@ -47,8 +47,15 @@ install:
 		vapi/toxencryptsave.deps \
 		/usr/share/vala-0.26/vapi
 
+clean:
+	rm *tgz \
+		*deb
+
 deb-pkg:
 	checkinstall --install=no \
+		--deldoc=yes \
+		--deldesc=yes \
+		--delspec=yes \
 		--default \
 		--pkgname=tox-vapi \
 		--pkgversion=0.9 \
