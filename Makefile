@@ -52,7 +52,7 @@ clean:
 		*deb
 
 deb-pkg:
-	checkinstall --install=no \
+	make clean ; checkinstall --install=no \
 		--deldoc=yes \
 		--deldesc=yes \
 		--delspec=yes \
