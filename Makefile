@@ -49,7 +49,7 @@ install:
 
 clean:
 	rm *tgz \
-		*deb
+		../tox-vapi_0.9-1_amd64.deb
 
 deb-pkg:
 	make clean ; checkinstall --install=no \
