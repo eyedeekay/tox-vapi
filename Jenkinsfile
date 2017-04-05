@@ -6,7 +6,6 @@ pipeline {
             steps {
                 echo 'Building..'
                 sh 'make clean'
-                archiveArtifacts artifacts: 'bin', fingerprint: true
             }
         }
         stage('Deploy') {
