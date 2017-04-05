@@ -48,8 +48,7 @@ install:
 		/usr/share/vala-0.26/vapi
 
 clean:
-	rm *tgz \
-		../tox-vapi_0.9-1_amd64.deb
+	rm -f *tgz
 
 deb-pkg:
 	make clean ; checkinstall --install=no \
